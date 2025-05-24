@@ -55,7 +55,7 @@ This will launch the app at `http://localhost:3000`.
   /pages
   /styles
   /utils
-  App.jsx
+  App.tsx
   index.js
 tailwind.config.js
 postcss.config.js

@@ -1,7 +1,7 @@
 // File: components/common/Chatbot.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { Mail, Send, MessageCircle, X } from 'lucide-react';
-import FadeInOnMount from './FadeInOnMount'; // Import the FadeInOnMount component
+import FadeInOnMount from '../common/FadeInOnMount'; // Import the FadeInOnMount component
 
 const Chatbot = ({ navigateTo, setIsChatbotOpen }) => {
   const [messages, setMessages] = useState([]);

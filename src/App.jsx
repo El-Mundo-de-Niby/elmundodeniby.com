@@ -6,7 +6,7 @@ import Footer from './components/layout/Footer';
 import HomePage from './components/pages/HomePage';
 import AboutUsPage from './components/pages/AboutUsPage';
 import ContactPage from './components/pages/ContactPage';
-import Chatbot from './components/common/Chatbot';
+import Chatbot from './components/layout/Chatbot';
 import { MessageCircle, X } from 'lucide-react';
 
 const App = () => {
