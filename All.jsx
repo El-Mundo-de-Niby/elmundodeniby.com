@@ -646,8 +646,11 @@ const HomePage = ({ heroScrollY, navigateTo }) => { // Added navigateTo prop
         <div className="container mx-auto px-4 max-w-6xl">
           <FadeInOnScroll>
             <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-gray-100 mb-12 leading-tight">
-              Nuestros Bots
+              Our Services
             </h2>
+            <p className="text-lg md:text-2xl text-gray-700 dark:text-gray-300 mt-12 leading-relaxed max-w-3xl mx-auto">
+              This is just a quick summary.
+            </p>
           </FadeInOnScroll>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <FadeInOnScroll delay={0}>

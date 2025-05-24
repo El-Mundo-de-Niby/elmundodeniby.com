@@ -61,7 +61,12 @@ const App = () => {
       <div className="fixed bottom-6 right-6 z-50">
         <button
           onClick={() => setIsChatbotOpen(!isChatbotOpen)}
-          className="bg-gray-900 text-white p-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors duration-300 transform hover:scale-110 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600"
+          className="bg-gray-900 text-white p-4 rounded-full shadow-lg
+             hover:bg-gray-700
+             transform hover:scale-110  /* Put transform and scale together */
+             transition duration-300    /* Put transition and duration together */
+             focus:outline-none
+             dark:bg-gray-700 dark:hover:bg-gray-600"
           aria-label="Abrir chat de soporte"
         >
           {isChatbotOpen ? <X size={28} /> : <MessageCircle size={28} />}
@@ -70,7 +75,15 @@ const App = () => {
 
       {/* Modal/Overlay del Chatbot */}
       {isChatbotOpen && (
-        <div className="fixed bottom-20 right-6 w-80 h-[500px] md:w-96 md:h-[600px] bg-white dark:bg-gray-800 rounded-lg shadow-2xl z-50 flex flex-col transition-all duration-300 ease-in-out transform origin-bottom-right scale-100">
+        <div className="
+          fixed bottom-20 right-6 z-50
+          w-80 md:w-96
+          h-[calc(100vh-120px)]       /* Dynamic height: 100% viewport height minus 120px from bottom */
+          max-h-[600px]               /* Maximum height for larger screens */
+          bg-white dark:bg-gray-800 rounded-lg shadow-2xl
+          flex flex-col               /* Make this wrapper a flex container */
+          transition-all duration-300 ease-in-out transform origin-bottom-right scale-100
+        ">
           <Chatbot navigateTo={navigateTo} setIsChatbotOpen={setIsChatbotOpen} /> {/* Pass navigateTo and setIsChatbotOpen props */}
         </div>
       )}
