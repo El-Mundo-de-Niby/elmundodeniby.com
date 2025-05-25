@@ -14,6 +14,7 @@ import { handleSuccessfulLogin, handleLogout, checkLoginStatus } from './compone
 import Chatbot from './components/layout/Chatbot';
 import { MessageCircle, X } from 'lucide-react';
 import ScrollToTop from './components/common/ScrollToTop';
+import NotFoundPage from './components/pages/NotFoundPage';
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -102,11 +103,9 @@ const App = () => {
           <Route path="/login" element={<LoginPage onLoginSuccess={onLoginSuccess} />} /> 
           <Route path="/register" element={<RegisterPage onRegisterSuccess={onRegisterSuccess} />} /> 
           {/* Añadir aquí las rutas para /services y /specialties si son páginas separadas */}
-          <Route path="/services" element={<p className="text-center text-xl mt-20 dark:text-white">Services Page (Coming Soon)</p>} />
-          <Route path="/specialties" element={<p className="text-center text-xl mt-20 dark:text-white">Specialties Page (Coming Soon)</p>} />
 
           {/* Ruta para 404 Not Found */}
-          <Route path="*" element={<p className="text-center text-xl mt-20 dark:text-white">404: Page Not Found</p>} />
+          <Route path="*" element={<NotFoundPage />} /> {/* <--- Usa el componente NotFoundPage */}
         </Routes>
       </main>
 
