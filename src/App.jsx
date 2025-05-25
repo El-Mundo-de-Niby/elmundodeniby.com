@@ -1,72 +1,125 @@
-/* Archivo principal App.jsx (src/App.jsx) */
+// File: src/App.jsx
 
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import HomePage from './components/pages/HomePage';
 import AboutUsPage from './components/pages/AboutUsPage';
 import ContactPage from './components/pages/ContactPage';
+import LoginPage from './components/pages/LoginPage';
+import RegisterPage from './components/pages/RegisterPage';
+// Asegúrate de importar las funciones de autenticación relevantes
+import { handleSuccessfulLogin, handleLogout, checkLoginStatus } from './components/utils/auth';
 import Chatbot from './components/layout/Chatbot';
 import { MessageCircle, X } from 'lucide-react';
+import ScrollToTop from './components/common/ScrollToTop';
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [heroScrollY, setHeroScrollY] = useState(0);
-  const [currentPage, setCurrentPage] = useState('home');
   const [darkMode, setDarkMode] = useState(false);
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
-  const navigateTo = (target) => {
-    if (["home", "about", "contact"].includes(target)) {
-      setCurrentPage(target);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      if (currentPage !== 'home') {
-        setCurrentPage('home');
-        setTimeout(() => {
-          const section = document.getElementById(target);
-          section?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-      } else {
-        const section = document.getElementById(target);
-        section?.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-    setIsMenuOpen(false);
-    if (target !== 'home' && target !== 'contact') setIsChatbotOpen(false);
+  // useNavigate hook para la navegación programática
+  const navigate = useNavigate();
+
+  // Define onLoginSuccess y onRegisterSuccess como funciones que utilizan handleSuccessfulLogin
+  const onLoginSuccess = (userData) => {
+    handleSuccessfulLogin(setIsLoggedIn, setCurrentUser, userData);
+    navigate('/'); // Redirigir a la home después del login
+  };
+
+  // onRegisterSuccess debe ser similar a onLoginSuccess para manejar los datos del usuario después del registro
+  const onRegisterSuccess = (userData) => {
+    handleSuccessfulLogin(setIsLoggedIn, setCurrentUser, userData);
+    navigate('/'); // Redirigir a la home después del registro
   };
 
   useEffect(() => {
-    const handleScroll = () => setHeroScrollY(window.scrollY);
+    checkLoginStatus(setIsLoggedIn, setCurrentUser);
+  }, []);
+
+
+  const toggleDarkMode = () => {
+    setDarkMode(prevMode => !prevMode);
+  };
+
+  useEffect(() => {
+    // Manejo inicial del modo oscuro (al cargar la app)
+    const savedMode = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialMode = savedMode ? savedMode === 'dark' : prefersDark;
+    setDarkMode(initialMode);
+
+    if (initialMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, []); // Se ejecuta una vez al montar
+
+  useEffect(() => {
+    // Actualiza la clase 'dark' en el <html> cuando darkMode cambia
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark'); // Guarda la preferencia del usuario
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light'); // Guarda la preferencia del usuario
+    }
+  }, [darkMode]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setHeroScrollY(window.scrollY);
+    };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', darkMode);
-  }, [darkMode]);
-
   return (
-    <div className="font-inter min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-800 transition-colors">
+    <div className={`app-container ${darkMode ? 'dark' : ''}`}>
       <Header
-        navigateTo={navigateTo}
-        transparentHeaderLightText={currentPage === 'home'} // Set to true for homepage
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+        heroScrollY={heroScrollY}
+        toggleDarkMode={toggleDarkMode}
+        darkMode={darkMode}
+        isLoggedIn={isLoggedIn}
+        currentUser={currentUser}
+        onLogout={() => handleLogout(setIsLoggedIn, setCurrentUser, navigate)} // Pasa la función 'navigate' directamente
       />
       <main className="flex-grow">
-        {currentPage === 'home' && <HomePage heroScrollY={heroScrollY} navigateTo={navigateTo} />}
-        {currentPage === 'about' && <AboutUsPage setPage={setCurrentPage} />}
-        {currentPage === 'contact' && <ContactPage setPage={setCurrentPage} />}
+        {/* Usamos Routes y Route para definir las rutas */}
+        <Routes>
+          <Route path="/" element={<HomePage heroScrollY={heroScrollY} />} /> 
+          <Route path="/about" element={<AboutUsPage />} /> 
+          <Route path="/contact" element={<ContactPage />} /> 
+          <Route path="/login" element={<LoginPage onLoginSuccess={onLoginSuccess} />} /> 
+          <Route path="/register" element={<RegisterPage onRegisterSuccess={onRegisterSuccess} />} /> 
+          {/* Añadir aquí las rutas para /services y /specialties si son páginas separadas */}
+          <Route path="/services" element={<p className="text-center text-xl mt-20 dark:text-white">Services Page (Coming Soon)</p>} />
+          <Route path="/specialties" element={<p className="text-center text-xl mt-20 dark:text-white">Specialties Page (Coming Soon)</p>} />
+
+          {/* Ruta para 404 Not Found */}
+          <Route path="*" element={<p className="text-center text-xl mt-20 dark:text-white">404: Page Not Found</p>} />
+        </Routes>
       </main>
+
       {/* Botón flotante de soporte */}
       <div className="fixed bottom-6 right-6 z-50">
         <button
           onClick={() => setIsChatbotOpen(!isChatbotOpen)}
           className="bg-gray-900 text-white p-4 rounded-full shadow-lg
-             hover:bg-gray-700
-             transform hover:scale-110  /* Put transform and scale together */
-             transition duration-300    /* Put transition and duration together */
-             focus:outline-none
-             dark:bg-gray-700 dark:hover:bg-gray-600"
+            hover:bg-gray-700
+            transform hover:scale-110
+            transition duration-300
+            focus:outline-none
+            dark:bg-gray-700 dark:hover:bg-gray-600"
           aria-label="Abrir chat de soporte"
         >
           {isChatbotOpen ? <X size={28} /> : <MessageCircle size={28} />}
@@ -78,18 +131,28 @@ const App = () => {
         <div className="
           fixed bottom-20 right-6 z-50
           w-80 md:w-96
-          h-[calc(100vh-120px)]       /* Dynamic height: 100% viewport height minus 120px from bottom */
-          max-h-[600px]               /* Maximum height for larger screens */
+          h-[calc(100vh-120px)]
+          max-h-[600px]
           bg-white dark:bg-gray-800 rounded-lg shadow-2xl
-          flex flex-col               /* Make this wrapper a flex container */
-          transition-all duration-300 ease-in-out transform origin-bottom-right scale-100
+          flex flex-col
+          transition-all duration-300 ease-in-out transform origin-bottom
         ">
-          <Chatbot navigateTo={navigateTo} setIsChatbotOpen={setIsChatbotOpen} /> {/* Pass navigateTo and setIsChatbotOpen props */}
+        
+          <Chatbot onClose={() => setIsChatbotOpen(false)} />
         </div>
       )}
-      <Footer navigateTo={navigateTo} />
+     
+      <Footer />
     </div>
   );
 };
 
-export default App;
+// <Router> debe envolver todo el componente App para que los hooks de enrutamiento funcionen
+const AppWrapper = () => (
+  <Router>
+    <ScrollToTop />
+    <App />
+  </Router>
+);
+
+export default AppWrapper;

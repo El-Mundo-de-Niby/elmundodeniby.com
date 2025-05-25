@@ -2,12 +2,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Mail, Send, MessageCircle, X } from 'lucide-react';
 import FadeInOnMount from '../common/FadeInOnMount'; // Import the FadeInOnMount component
+import { useNavigate } from 'react-router-dom';
 
-const Chatbot = ({ navigateTo, setIsChatbotOpen }) => {
+const Chatbot = ({ setIsChatbotOpen }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  const navigate = useNavigate(); // Import useNavigate from react-router-dom
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -130,7 +132,7 @@ const Chatbot = ({ navigateTo, setIsChatbotOpen }) => {
 
           <button
             onClick={() => {
-              navigateTo('contact');
+              navigate('contact');
               setIsChatbotOpen(false); // Close chatbot when navigating to contact page
             }}
             className="w-full inline-flex items-center justify-center bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-100 px-4 py-3 rounded-full text-md font-semibold hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors shadow-md hover:scale-[1.02] duration-200 transform mb-2"

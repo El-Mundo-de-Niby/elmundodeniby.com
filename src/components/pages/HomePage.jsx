@@ -9,11 +9,11 @@ import ServicesSection from '../home/ServicesSection';
 import ReviewsSection from '../home/ReviewsSection';
 import CTACSection from '../home/CTASection';
 
-const HomePage = ({ heroScrollY, navigateTo }) => {
+const HomePage = ({ heroScrollY }) => {
   return (
     <>
       {/* Sección Hero con Parallax de Fondo y Texto - Estilo Revolut/Apple */}
-      <HeroSection heroScrollY={heroScrollY} navigateTo={navigateTo} />
+      <HeroSection heroScrollY={heroScrollY} />
 
       {/* Sección "Trusted Companies" */}
       <TrustedCompanies />
@@ -34,7 +34,7 @@ const HomePage = ({ heroScrollY, navigateTo }) => {
       <ReviewsSection />
 
       {/* Sección de Llamada a la Acción (CTA) */}
-      <CTACSection navigateTo={navigateTo} />
+      <CTACSection />
     </>
   );
 };
