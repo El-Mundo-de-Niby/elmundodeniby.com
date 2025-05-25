@@ -74,7 +74,7 @@ const AboutUsPage = () => {
             {/* Photo on the right */}
             <div className="md:w-1/2 flex justify-center">
               <img
-                src="https://framerusercontent.com/images/kC6y5x9uR7S33E0bQ9MvBfN5G0.jpg"
+                src="https://picsum.photos/seed/digitalstrategy/1200/700"
                 alt="Our History"
                 className="rounded-3xl shadow-xl w-full max-w-md md:max-w-none"
                 style={{
@@ -102,7 +102,7 @@ const AboutUsPage = () => {
             {/* Photo on the left */}
             <div className="md:w-1/2 flex justify-center">
               <img
-                src="https://framerusercontent.com/images/3G6oYFv5E5mY7yq1z8l3jB2w.jpg"
+                src="https://picsum.photos/seed/digitalstrategy/1200/700"
                 alt="Our Mission"
                 className="rounded-3xl shadow-xl w-full max-w-md md:max-w-none"
                 style={{
@@ -110,6 +110,68 @@ const AboutUsPage = () => {
                   shapeOutside: 'polygon(100% 15%, 0 0, 0 85%, 100% 100%)',
                 }}
               />
+            </div>
+          </div>
+        </FadeInOnScroll>
+
+        {/* Section: Our Team - Diego Rodríguez */}
+        <FadeInOnScroll delay={300}>
+          <div className="text-center mb-32 md:mb-48">
+            <h2 className="text-4xl md:text-6xl font-extrabold text-gray-900 dark:text-gray-100 mb-16">
+              Meet Our Founder
+            </h2>
+            {/* Card background, text, and border for dark mode */}
+            <div className="flex flex-col items-center max-w-2xl mx-auto bg-white dark:bg-gray-800 p-10 rounded-3xl shadow-2xl dark:shadow-xl dark:shadow-gray-700/50 border border-gray-100 dark:border-gray-700">
+              <div className="mb-10 transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                {/* Image border color for dark mode */}
+                <img src="https://picsum.photos/seed/diegorodriguez/800/1000" alt="Diego Rodríguez" className="rounded-full shadow-xl w-64 h-64 object-cover border-4 border-gray-300 dark:border-gray-500" />
+              </div>
+              <p className="text-base font-medium text-gray-600 dark:text-gray-400 mb-4 uppercase tracking-wider">CEO & Founder</p>
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-8">
+                Diego Rodríguez <span className="font-normal text-gray-700 dark:text-gray-300">(dewstouh)</span>
+              </h3>
+              <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed px-4">
+                Hi! I'm Diego Rodríguez, known in the online community as "dewstouh".
+                My journey in software development has focused on creating innovative
+                solutions and teaching programming through my channel "Coding with Dew".
+                I firmly believe in the power of technology to transform lives and businesses.
+              </p>
+              {/* Social Media Links: Add dark mode text colors and specific hover colors */}
+              <div className="flex space-x-6 mt-8">
+                <a href="https://www.linkedin.com/in/diegorodriguez" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                  <Linkedin size={32} className="text-gray-600 dark:text-gray-400 hover:text-blue-700 dark:hover:text-blue-500 transition-colors duration-300" />
+                </a>
+                <a href="https://twitter.com/yourtwitterhandle" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                  <Twitter size={32} className="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-300" />
+                </a>
+                <a href="https://github.com/yourgithubprofile" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                  <Github size={32} className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-300" />
+                </a>
+                <a href="https://www.youtube.com/@CodingWithDew" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                  <Youtube size={32} className="text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 transition-colors duration-300" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </FadeInOnScroll>
+
+        {/* Section: Learn with "Coding with Dew" */}
+        <FadeInOnScroll delay={400}>
+          <div className="text-center mb-32 md:mb-48">
+            <h2 className="text-4xl md:text-6xl font-extrabold text-gray-900 dark:text-gray-100 mb-8">
+              Learn with "Coding with Dew"
+            </h2>
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-16">
+              Discover tutorials, projects, and programming tips to boost your skills, including complete guides to creating your own Discord bots.
+            </p>
+            {/* Video placeholder and button for dark mode */}
+            <div className="relative w-full max-w-5xl mx-auto aspect-video bg-gray-200 dark:bg-gray-700 rounded-3xl shadow-2xl dark:shadow-xl dark:shadow-gray-700/50 overflow-hidden group">
+              <img src="https://picsum.photos/seed/youtubechannel/1280/720" alt="Video Placeholder" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <a href="https://www.youtube.com/@CodingWithDew" target="_blank" rel="noopener noreferrer" className="inline-flex items-center bg-white dark:bg-gray-900 text-gray-900 dark:text-white px-10 py-5 rounded-full text-lg font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-lg transform hover:scale-105">
+                  Visit Channel <ChevronRight className="ml-3" size={24} />
+                </a>
+              </div>
             </div>
           </div>
         </FadeInOnScroll>

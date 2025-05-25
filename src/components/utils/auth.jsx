@@ -2,91 +2,102 @@
 
 // Función para manejar el inicio de sesión exitoso
 export const handleSuccessfulLogin = (setIsLoggedIn, setCurrentUser, userData) => {
+    // Asumimos que userData.name ya viene en el formato correcto (UTF-8)
+    // y no necesita normalización aquí para el estado o localStorage.
     setIsLoggedIn(true);
     setCurrentUser(userData);
-    // Almacenar datos en localStorage para persistencia
     localStorage.setItem('userLoggedIn', 'true');
     localStorage.setItem('userData', JSON.stringify(userData));
-    console.log('User logged in:', userData);
+    console.log('User logged in (auth.jsx - name original):', userData);
 };
 
 // Función para manejar el cierre de sesión
-// Ahora acepta 'navigate' directamente
 export const handleLogout = (setIsLoggedIn, setCurrentUser, navigate) => {
     setIsLoggedIn(false);
     setCurrentUser(null);
     localStorage.removeItem('userLoggedIn');
     localStorage.removeItem('userData');
-    navigate('/'); // Redirigir a la página de inicio después de cerrar sesión usando navigate
+    navigate('/'); // Redirigir a la página de inicio después de cerrar sesión es correcto aquí
     console.log('User logged out.');
 };
 
 // Función para verificar el estado de inicio de sesión al cargar la app
 export const checkLoginStatus = (setIsLoggedIn, setCurrentUser) => {
     const loggedIn = localStorage.getItem('userLoggedIn');
-    const userData = localStorage.getItem('userData');
-    if (loggedIn === 'true' && userData) {
-        setIsLoggedIn(true);
-        setCurrentUser(JSON.parse(userData));
+    const storedUserData = localStorage.getItem('userData');
+    if (loggedIn === 'true' && storedUserData) {
+        try {
+            const parsedUserData = JSON.parse(storedUserData);
+            console.log('User data loaded from localStorage (auth.jsx):', parsedUserData);
+            setIsLoggedIn(true);
+            setCurrentUser(parsedUserData);
+        } catch (e) {
+            console.error("Error parsing user data from localStorage:", e);
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userData');
+        }
     }
 };
 
-// NUEVA FUNCIÓN: Manejar el inicio de sesión tradicional
-// Ahora acepta 'navigate' directamente
-export const performLogin = (email, password, onLoginSuccess, navigate) => {
+// Inicio de sesión tradicional
+// El parámetro 'navigate' se elimina de aquí si la navegación final la hace App.jsx
+export const performLogin = (email, password, onLoginSuccessCallback) => {
     console.log('Logging in with:', { email, password });
-    alert('Login functionality is for demonstration. Integrate your backend here.');
+    // alert('Login functionality is for demonstration. Integrate your backend here.');
 
-    // SIMULAR UN LOGIN EXITOSO CON DATOS DE USUARIO COMPLETOS Y LA TILDE
     const userData = {
-        name: 'Diego Rodríguez', // <--- Nombre con tilde para probar
+        name: 'Diego Rodríguez', // Nombre original con tilde
         email: email,
-        photo: 'https://ui-avatars.com/api/?name=Diego+Rodriguez&background=0D8ABC&color=fff' // <--- URL de foto válida de prueba
+        photo: `https://ui-avatars.com/api/?name=${encodeURIComponent('Diego Rodríguez')}&background=0D8ABC&color=fff`
     };
-    onLoginSuccess(userData); // <--- **PASANDO userData A onLoginSuccess**
-    navigate('/'); // Navegar a la home después de login exitoso
-    return true; // Indicar que el login fue exitoso
+    console.log('auth.jsx - performLogin: Calling onLoginSuccessCallback with:', userData);
+    onLoginSuccessCallback(userData); // Este callback es (userData, from) => onLoginSuccess(userData, from) en App.jsx
+    // ELIMINADO: navigate('/');
+    return true;
 };
 
-
-// NUEVA FUNCIÓN: Manejar el registro tradicional
-// Ahora acepta 'navigate' directamente
-export const performRegister = (name, email, password, confirmPassword, onRegisterSuccess, navigate) => {
+// Registro tradicional
+// El parámetro 'navigate' se elimina de aquí
+export const performRegister = (name, email, password, confirmPassword, onRegisterSuccessCallback) => {
     if (password !== confirmPassword) {
         alert('Passwords do not match!');
-        return false; // Indicar que el registro falló por las contraseñas
+        return false;
     }
-
     console.log('Registering with:', { name, email, password });
-    alert('Registration functionality is for demonstration. Integrate your backend here.');
-
+    // alert('Registration functionality is for demonstration. Integrate your backend here.');
     const userData = {
         name: name,
         email: email,
-        photo: 'https://i.pravatar.cc/150?img=5'
+        photo: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0D8ABC&color=fff`
     };
-    onRegisterSuccess(userData);
-    navigate('/'); // Navegar a la home después de registro exitoso
-    return true; // Indicar que el registro fue exitoso
+    onRegisterSuccessCallback(userData);
+    // ELIMINADO: navigate('/');
+    return true;
 };
 
-
-// NUEVA FUNCIÓN: Manejar el éxito del login/registro con Google
-// Ahora acepta 'navigate' directamente
-export const handleGoogleAuthSuccess = (credentialResponse, onAuthSuccess, navigate) => {
-    console.log('Google authentication successful:', credentialResponse);
-    const decodedToken = JSON.parse(atob(credentialResponse.credential.split('.')[1]));
+// Éxito del login/registro con Google
+// El parámetro 'navigate' se elimina de aquí
+export const handleGoogleAuthSuccess = (credentialResponse, onAuthSuccessCallback) => {
+    let decodedToken;
+    try {
+        decodedToken = JSON.parse(atob(credentialResponse.credential.split('.')[1]));
+    } catch (e) {
+        console.error("Error decoding Google token", e);
+        handleGoogleAuthError();
+        return;
+    }
 
     const userData = {
         name: decodedToken.name || 'Google User',
         email: decodedToken.email,
-        photo: decodedToken.picture || `https://ui-avatars.com/api/?name=${decodedToken.name}&background=0D8ABC&color=fff`
+        photo: decodedToken.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(decodedToken.name || 'G')}&background=0D8ABC&color=fff`
     };
-    onAuthSuccess(userData);
-    navigate('/'); // Navegar a la home después de autenticación Google exitosa
+    console.log('auth.jsx - handleGoogleAuthSuccess: Calling onAuthSuccessCallback with:', userData);
+    onAuthSuccessCallback(userData);
+    // ELIMINADO: navigate('/'); 
 };
 
-// NUEVA FUNCIÓN: Manejar el error de login/registro con Google
+// Error de login/registro con Google
 export const handleGoogleAuthError = () => {
     console.error('Google authentication failed');
     alert('Google Authentication Failed. Please try again.');

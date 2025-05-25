@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
     const subtitles = [
@@ -101,6 +102,8 @@ const HeroSection = () => {
         exit: { opacity: 0, y: -15 },
     };
 
+    const navigate = useNavigate()
+
     return (
         <section
             ref={heroRef}
@@ -174,13 +177,17 @@ const HeroSection = () => {
                         transition-all duration-1000 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] delay-600
                     "
                 >
-                    <button className="
+                    <button 
+                    className="
                         bg-gray-900 text-white px-5 py-3 font-semibold hover:bg-gray-700
                         px-8 py-3.5 rounded-full text-lg sm:text-xl font-semibold whitespace-nowrap cursor-pointer
                         transition-all duration-300 ease-in-out
                         bg-apple-blue text-white 
                         shadow-lg 
-                    ">
+                    "
+                    onClick={() => navigate('create-bot')}
+
+>
                         Start a Bot
                     </button>
 
@@ -190,7 +197,7 @@ const HeroSection = () => {
                         bg-gray-200 text-gray-900 shadow-lg
                         hover:bg-gray-300
                         dark:bg-gray-600 dark:text-gray-100 dark:hover:bg-gray-500
-                    ">
+                    " onClick={() => navigate('shop')}>
                         Shop
                     </button>
                 </div>

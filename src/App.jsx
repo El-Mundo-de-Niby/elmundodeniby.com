@@ -1,7 +1,6 @@
 // File: src/App.jsx
-
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom'; // Asegúrate de importar useLocation si lo usas directamente aquí
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import HomePage from './components/pages/HomePage';
@@ -9,67 +8,76 @@ import AboutUsPage from './components/pages/AboutUsPage';
 import ContactPage from './components/pages/ContactPage';
 import LoginPage from './components/pages/LoginPage';
 import RegisterPage from './components/pages/RegisterPage';
-// Asegúrate de importar las funciones de autenticación relevantes
+import ShopPage from './components/pages/ShopPage';
+import BotDetailPage from './components/pages/shop/BotDetailPage';
+import CreateBotPage from './components/pages/CreateBotPage';
+import ProtectedRoute from './components/auth/ProtectedRoute'; // Importar ProtectedRoute
 import { handleSuccessfulLogin, handleLogout, checkLoginStatus } from './components/utils/auth';
 import Chatbot from './components/layout/Chatbot';
 import { MessageCircle, X } from 'lucide-react';
 import ScrollToTop from './components/common/ScrollToTop';
 import NotFoundPage from './components/pages/NotFoundPage';
+import ProfileSettingsPage from './components/pages/ProfileSettingsPage';
+import ServiceDetailPage from './components/pages/home/ServiceDetailPage';
+import CartPage from './components/pages/CartPage';
+import BotConfigurationPage from './components/pages/profile/bot/BotConfigurationPage';
+import BotStatsPage from './components/pages/profile/bot/BotStatsPage';
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [heroScrollY, setHeroScrollY] = useState(0);
-  const [darkMode, setDarkMode] = useState(false);
+
+  const getInitialDarkMode = () => {
+    if (typeof window !== 'undefined') {
+      const savedMode = localStorage.getItem('theme');
+      return savedMode === 'dark';
+    }
+    return false;
+  };
+  const [darkMode, setDarkMode] = useState(getInitialDarkMode);
+
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
-  // useNavigate hook para la navegación programática
   const navigate = useNavigate();
+  // const location = useLocation(); // No es necesario aquí si LoginPage lo maneja
 
-  // Define onLoginSuccess y onRegisterSuccess como funciones que utilizan handleSuccessfulLogin
-  const onLoginSuccess = (userData) => {
-    handleSuccessfulLogin(setIsLoggedIn, setCurrentUser, userData);
-    navigate('/'); // Redirigir a la home después del login
+  const onLoginSuccess = (rawUserData, from) => { // rawUserData viene de performLogin o handleGoogleAuthSuccess
+    handleSuccessfulLogin(setIsLoggedIn, setCurrentUser, rawUserData); // Esta función ahora procesa el nombre internamente
+    navigate(from || '/', { replace: true });
   };
 
-  // onRegisterSuccess debe ser similar a onLoginSuccess para manejar los datos del usuario después del registro
-  const onRegisterSuccess = (userData) => {
-    handleSuccessfulLogin(setIsLoggedIn, setCurrentUser, userData);
-    navigate('/'); // Redirigir a la home después del registro
+  const onRegisterSuccess = (rawUserData) => { // rawUserData viene de performRegister
+    handleSuccessfulLogin(setIsLoggedIn, setCurrentUser, rawUserData); // Esta función ahora procesa el nombre internamente
+    navigate('/');
+  };
+
+  const handleUpdateProfile = (updatedProfile) => {
+    setCurrentUser(prev => ({ ...prev, ...updatedProfile }));
+  };
+
+  const handleDeleteAccount = () => {
+    handleLogout(setIsLoggedIn, setCurrentUser, navigate);
   };
 
   useEffect(() => {
     checkLoginStatus(setIsLoggedIn, setCurrentUser);
   }, []);
 
-
   const toggleDarkMode = () => {
     setDarkMode(prevMode => !prevMode);
   };
 
   useEffect(() => {
-    // Manejo inicial del modo oscuro (al cargar la app)
-    const savedMode = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialMode = savedMode ? savedMode === 'dark' : prefersDark;
-    setDarkMode(initialMode);
-
-    if (initialMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, []); // Se ejecuta una vez al montar
-
-  useEffect(() => {
-    // Actualiza la clase 'dark' en el <html> cuando darkMode cambia
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark'); // Guarda la preferencia del usuario
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light'); // Guarda la preferencia del usuario
+    if (typeof window !== 'undefined') {
+      if (darkMode) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
     }
   }, [darkMode]);
 
@@ -92,24 +100,56 @@ const App = () => {
         darkMode={darkMode}
         isLoggedIn={isLoggedIn}
         currentUser={currentUser}
-        onLogout={() => handleLogout(setIsLoggedIn, setCurrentUser, navigate)} // Pasa la función 'navigate' directamente
+        onLogout={() => handleLogout(setIsLoggedIn, setCurrentUser, navigate)}
       />
       <main className="flex-grow">
-        {/* Usamos Routes y Route para definir las rutas */}
         <Routes>
-          <Route path="/" element={<HomePage heroScrollY={heroScrollY} />} /> 
-          <Route path="/about" element={<AboutUsPage />} /> 
-          <Route path="/contact" element={<ContactPage />} /> 
-          <Route path="/login" element={<LoginPage onLoginSuccess={onLoginSuccess} />} /> 
-          <Route path="/register" element={<RegisterPage onRegisterSuccess={onRegisterSuccess} />} /> 
-          {/* Añadir aquí las rutas para /services y /specialties si son páginas separadas */}
-
-          {/* Ruta para 404 Not Found */}
-          <Route path="*" element={<NotFoundPage />} /> {/* <--- Usa el componente NotFoundPage */}
+          <Route path="/" element={<HomePage heroScrollY={heroScrollY} />} />
+          <Route path="/about" element={<AboutUsPage />} />
+          <Route path="/shop" element={<ShopPage />} />
+          <Route path="/shop/:botId" element={<BotDetailPage />} />
+          <Route
+            path="/create-bot"
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn} element={<CreateBotPage />} />
+            }
+          />
+          
+          <Route path="/services/:serviceId" element={<ServiceDetailPage />} /> {/* Nueva Ruta Dinámica */}
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/login" element={<LoginPage onLoginSuccess={onLoginSuccess} />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/register" element={<RegisterPage onRegisterSuccess={onRegisterSuccess} />} />
+          
+          <Route
+            path="/profile/*"
+            element={
+              <ProtectedRoute
+                isLoggedIn={isLoggedIn}
+                element={
+                  <ProfileSettingsPage
+                    currentUser={currentUser}
+                    onUpdateProfile={handleUpdateProfile}
+                    onDeleteAccount={handleDeleteAccount}
+                    onLogout={() => handleLogout(setIsLoggedIn, setCurrentUser, navigate)}
+                  />
+                }
+              />
+            }
+          />
+          <Route
+            path="/profile/bots/:botId/configure"
+            element={<ProtectedRoute isLoggedIn={isLoggedIn} element={<BotConfigurationPage />} />}
+          />
+          <Route
+            path="/profile/bots/:botId/stats"
+            element={<ProtectedRoute isLoggedIn={isLoggedIn} element={<BotStatsPage />} />}
+          />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
 
-      {/* Botón flotante de soporte */}
+      {/* Chatbot y Footer sin cambios */}
       <div className="fixed bottom-6 right-6 z-50">
         <button
           onClick={() => setIsChatbotOpen(!isChatbotOpen)}
@@ -125,7 +165,6 @@ const App = () => {
         </button>
       </div>
 
-      {/* Modal/Overlay del Chatbot */}
       {isChatbotOpen && (
         <div className="
           fixed bottom-20 right-6 z-50
@@ -136,17 +175,15 @@ const App = () => {
           flex flex-col
           transition-all duration-300 ease-in-out transform origin-bottom
         ">
-        
-          <Chatbot onClose={() => setIsChatbotOpen(false)} />
+          <Chatbot setIsChatbotOpen={setIsChatbotOpen} />
         </div>
       )}
-     
       <Footer />
     </div>
   );
 };
 
-// <Router> debe envolver todo el componente App para que los hooks de enrutamiento funcionen
+// AppWrapper no necesita cambios
 const AppWrapper = () => (
   <Router>
     <ScrollToTop />

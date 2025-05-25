@@ -1,53 +1,25 @@
 // File: components/layout/Header.jsx
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
-import { LogIn, UserPlus, Sun, Moon, X, Menu, LogOut, User, Settings, UserCircle } from 'lucide-react';
-const Header = ({ transparentHeaderLightText = false, transparentHeaderDarkText = false, isLoggedIn, currentUser, onLogout }) => {
+import { Link, useNavigate } from 'react-router-dom';
+import { LogIn, UserPlus, Sun, Moon, X, Menu, LogOut, User, Settings, UserCircle, ShoppingBag, ChevronDown, ShoppingCart } from 'lucide-react';
+
+const Header = ({ isLoggedIn, currentUser, onLogout, darkMode, toggleDarkMode }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef(null);
   const profileButtonRef = useRef(null);
-  const navigate = useNavigate(); // Import useNavigate from react-router-dom
+  const navigate = useNavigate();
 
-  // Setup theme correctly before anything renders
   useEffect(() => {
-    const savedMode = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialMode = savedMode ? savedMode === 'dark' : prefersDark;
-    setDarkMode(initialMode);
-
-    if (initialMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-
     setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  }, [darkMode, isMounted]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Effect for clicking outside the profile menu
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileMenuRef.current && !profileMenuRef.current.contains(event.target) &&
@@ -56,262 +28,251 @@ const Header = ({ transparentHeaderLightText = false, transparentHeaderDarkText 
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const toggleProfileMenu = () => setIsProfileMenuOpen(!isProfileMenuOpen);
+  const navItems = [
+    { name: 'Home', path: '/' },
+    { name: 'Services', path: '/services' },
+    { name: 'Shop', path: '/shop' },
+    { name: 'Create Bot', path: '/create-bot' },
+    { name: 'About Us', path: '/about' },
+    { name: 'Contact', path: '/contact' },
+  ];
 
-  const getTransparentTextColor = () => {
-    return darkMode ? 'text-white' : 'text-gray-900';
-  };
+  const headerBaseClass = "transition-colors duration-300 ease-in-out";
+  const scrolledHeaderBg = darkMode ? "bg-gray-900/80 backdrop-blur-lg shadow-lg" : "bg-white/80 backdrop-blur-lg shadow-lg";
+  const transparentHeaderBg = "bg-transparent";
 
-  const getTransparentLinkColor = () => {
-    return darkMode ? 'text-gray-300' : 'text-gray-600';
-  };
+  // Determinar colores basados en scroll y darkMode
+  // Estos se aplican a elementos que deben cambiar de color pero no necesariamente de fondo
+  const dynamicTextColor = isScrolled || !darkMode ? "text-gray-700 dark:text-gray-300" : "text-white";
+  const dynamicHoverTextColor = isScrolled || !darkMode ? "hover:text-blue-600 dark:hover:text-blue-400" : "hover:text-gray-200";
+  const dynamicHoverBgColor = isScrolled || !darkMode ? "hover:bg-gray-100 dark:hover:bg-gray-800" : "hover:bg-white/10";
 
-  const getTransparentLinkHoverColor = () => {
-    return darkMode ? 'hover:text-white' : 'hover:text-gray-900';
-  };
+  const dynamicIconColor = isScrolled || !darkMode ? "text-gray-600 dark:text-gray-400" : "text-gray-300";
+  const dynamicIconHoverColor = isScrolled || !darkMode ? "hover:text-blue-600 dark:hover:text-blue-400" : "hover:text-white";
 
-  const getMobileMenuTextColor = () => {
-    return darkMode ? 'text-gray-100' : 'text-gray-900';
-  };
 
-  if (!isMounted) return null;
+  if (!isMounted) {
+    return <header className={`fixed top-0 left-0 w-full z-50 h-[72px] ${headerBaseClass} ${darkMode ? 'bg-gray-900' : 'bg-white'}`}></header>;
+  }
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled
-      ? 'bg-white/70 backdrop-blur-md dark:bg-gray-900/70 shadow-md'
-      : 'bg-transparent'
-      }`}>
-      <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link 
-        key='Home' 
-        to='/' 
-        className={`text-3xl font-bold rounded-md py-2 transition-colors ${isScrolled
-          ? 'text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800'
-          : getTransparentTextColor()
-          }`}>
+    <header className={`fixed top-0 left-0 w-full z-50 ${headerBaseClass} ${isScrolled ? scrolledHeaderBg : transparentHeaderBg}`}>
+      <nav className="container mx-auto px-4 sm:px-6 py-3.5 flex justify-between items-center h-[72px]">
+        <Link
+          to='/'
+          className={`text-2xl font-bold ${headerBaseClass} ${isScrolled || !darkMode ? 'text-gray-900 dark:text-gray-100' : 'text-white'}`}
+        >
           El Mundo de Niby
         </Link>
 
-        {/* Desktop Navigation Links */}
-        <div className="hidden md:flex space-x-8 items-center ml-16">
-          {[
-            { name: 'Home', path: '/' },
-            { name: 'Services', path: '/services' }, // Assuming a /services route
-            { name: 'Contact', path: '/contact' },
-            { name: 'About Us', path: '/about' }
-          ].map((item) => (
+        <div className="hidden md:flex items-center space-x-1">
+          {navItems.map((item) => (
             <Link
               key={item.name}
-              to={item.path} // Use 'to' prop for Link
-              className={`font-bold transition-colors rounded-md px-3 py-2 text-lg ${isScrolled
-                ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800'
-                : `${getTransparentLinkColor()} ${getTransparentLinkHoverColor()}`
-                }`}
+              to={item.path}
+              className={`font-bold text-base px-3 py-2 rounded-md ${headerBaseClass} ${dynamicTextColor} ${dynamicHoverTextColor} ${dynamicHoverBgColor}`}
             >
               {item.name}
             </Link>
           ))}
         </div>
 
-        {/* Desktop Login/User Info, Register, and Dark Mode Toggle */}
-        <div className="hidden md:flex space-x-6 items-center ml-auto">
+        <div className="hidden md:flex items-center space-x-3">
+          {isLoggedIn && (
+            <button
+              onClick={() => navigate('/cart')}
+              aria-label="Shopping Cart"
+              title="Shopping Cart"
+              className={`p-2 rounded-full ${headerBaseClass} ${dynamicIconColor} ${dynamicIconHoverColor} ${dynamicHoverBgColor}`}
+            >
+              <ShoppingCart size={20} />
+            </button>
+          )}
+
           {isLoggedIn ? (
             <div className="relative">
               <button
                 ref={profileButtonRef}
-                onClick={toggleProfileMenu}
-                className={`flex items-center space-x-2 px-3 py-2 rounded-full transition-all duration-200
-                  ${isScrolled
-                    ? 'text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700'
-                    : `${getTransparentTextColor()} hover:bg-gray-200/50 dark:hover:bg-gray-700/50`
-                  }
-                  ${isProfileMenuOpen ? (darkMode ? 'bg-gray-700' : 'bg-gray-100') : ''}
-                `}
+                onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                className={`flex items-center space-x-2 pl-2 pr-1.5 py-1.5 rounded-full ${headerBaseClass} ${dynamicIconColor} ${dynamicIconHoverColor} ${dynamicHoverBgColor}`}
               >
-                {/* Profile Image Display */}
-                {currentUser && currentUser.photo ? (
+                {currentUser?.photo ? (
                   <img
                     src={currentUser.photo}
-                    alt={currentUser.name || 'User'}
-                    className="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600"
-                    
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name || 'User')}&background=0D8ABC&color=fff`;
-                    }}
+                    alt="User"
+                    referrerpolicy="no-referrer"
+                    className="w-7 h-7 rounded-full object-cover border border-gray-400 dark:border-gray-600"
+                    onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name || 'U')}&background=0D8ABC&color=fff&size=28`; }}
                   />
                 ) : (
-                  <User size={20} className="text-gray-500 dark:text-gray-400" />
+                  <UserCircle size={24} className={`${dynamicIconColor}`} />
                 )}
-                {/* Display User Name */}
-                <span className="font-semibold whitespace-nowrap">{decodeURIComponent(escape(currentUser?.name))}</span>
+                {/* Nombre de usuario añadido aquí */}
+                <span className={`text-sm font-medium hidden sm:inline ${dynamicTextColor}`}>
+                  {decodeURIComponent(escape(currentUser?.name)) || "Account"}
+                </span>
+                <ChevronDown size={16} className={`transition-transform duration-200 ${isProfileMenuOpen ? 'rotate-180' : ''} ${dynamicIconColor}`} />
               </button>
 
-              {/* Profile Dropdown Menu - Apple-style with refined spacing and text handling */}
-              {isProfileMenuOpen && (
-                <div
-                  ref={profileMenuRef}
-                  className={`absolute right-0 mt-2 w-56 rounded-xl shadow-2xl py-2
-                    ${darkMode ? 'bg-gray-700/90 backdrop-blur-md' : 'bg-white/90 backdrop-blur-md'}
-                    ring-1 ring-gray-900/10 dark:ring-white/10
-                    transform origin-top-right
-                    transition-all duration-300 ease-out
-                    ${isProfileMenuOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}
-                  `}
-                  role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex="-1"
-                >
-                  {/* Email display - Added overflow-hidden and text-ellipsis */}
-                  <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-600 mb-2 overflow-hidden text-ellipsis whitespace-nowrap">
-                    Signed in as <span className="font-medium text-gray-900 dark:text-gray-100">{currentUser?.email || 'user@example.com'}</span>
-                  </div>
-                  {/* Profile Link */}
-                  <a  onClick={() => { navigate('profile'); setIsProfileMenuOpen(false); }} className={`flex items-center px-4 py-2 text-base ${darkMode ? 'text-gray-200' : 'text-gray-700'} hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg mx-2 transition-colors duration-150`} role="menuitem" tabIndex="-1" id="user-menu-item-0">
-                    <UserCircle size={20} className="mr-3" /> Profile
-                  </a>
-                  {/* Settings Link */}
-                  <a  onClick={() => { navigate('settings'); setIsProfileMenuOpen(false); }} className={`flex items-center px-4 py-2 text-base ${darkMode ? 'text-gray-200' : 'text-gray-700'} hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg mx-2 transition-colors duration-150`} role="menuitem" tabIndex="-1" id="user-menu-item-1">
-                    <Settings size={20} className="mr-3" /> Settings
-                  </a>
-                  <div className="border-t border-gray-200 dark:border-gray-600 my-2 mx-2"></div>
-                  {/* Logout Button */}
-                  <button
-                    onClick={() => { onLogout(navigate); setIsProfileMenuOpen(false); }}
-                    className={`flex items-center w-full text-left px-4 py-2 text-base text-red-600 hover:bg-red-100 dark:hover:bg-red-700 dark:text-red-300 rounded-lg mx-2 transition-colors duration-150`} role="menuitem" tabIndex="-1" id="user-menu-item-2"
-                  >
-                    <LogOut size={20} className="mr-3" /> Logout
-                  </button>
+              <div
+                ref={profileMenuRef}
+                className={`absolute right-0 mt-2 w-60 rounded-lg shadow-xl py-1
+                            ${darkMode ? 'bg-gray-800/95 border border-gray-700/50' : 'bg-white/95 border border-gray-200/70'}
+                            backdrop-blur-sm ${headerBaseClass}
+                            transform origin-top-right transition-all duration-150 ease-out
+                            ${isProfileMenuOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}
+                role="menu"
+              >
+                <div className="px-3.5 py-2.5 border-b border-gray-200 dark:border-gray-700">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Signed in as</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate" title={currentUser?.email}>
+                    {currentUser?.email}
+                  </p>
                 </div>
-              )}
+                <div className="py-1">
+                  {[
+                    { label: 'Profile', path: '/profile', icon: UserCircle },
+                    { label: 'Settings', path: '/profile/settings', icon: Settings }
+                  ].map(item => (
+                    <Link
+                      key={item.label}
+                      to={item.path}
+                      onClick={() => setIsProfileMenuOpen(false)}
+                      className={`flex items-center w-full px-3.5 py-2 text-sm 
+                                  ${darkMode ? 'text-gray-300 hover:bg-gray-700/70 hover:text-white' : 'text-gray-700 hover:bg-gray-100'}
+                                  ${headerBaseClass} rounded-md mx-1 my-0.5`}
+                      role="menuitem"
+                    >
+                      <item.icon size={16} className="mr-2 text-gray-500 dark:text-gray-400" /> {item.label}
+                    </Link>
+                  ))}
+                </div>
+                <div className="border-t border-gray-200 dark:border-gray-700 mx-1"></div>
+                <button
+                  onClick={() => { onLogout(navigate); setIsProfileMenuOpen(false); }}
+                  className={`flex items-center w-[calc(100%-0.5rem)] mx-1 my-0.5 text-left px-3.5 py-2 text-sm rounded-md
+                              ${darkMode ? 'text-red-400 hover:bg-red-500/20 hover:text-red-300' : 'text-red-600 hover:bg-red-500/10'}
+                              ${headerBaseClass}`}
+                  role="menuitem"
+                >
+                  <LogOut size={16} className="mr-2" /> Logout
+                </button>
+              </div>
             </div>
           ) : (
             <>
-              <button
-                onClick={() => navigate('register')}
-                className="inline-flex items-center bg-gray-200 text-gray-900 px-5 py-3 rounded-full text-base font-semibold hover:bg-gray-300 transition-colors shadow-lg dark:bg-gray-600 dark:text-gray-100 dark:hover:bg-gray-500"
-              >
-                <UserPlus size={20} className="mr-2" /> Register
+              <button onClick={() => navigate('login')} className={`font-medium text-sm px-4 py-1.5 rounded-full ${headerBaseClass} ${dynamicTextColor} ${dynamicHoverTextColor} ${dynamicHoverBgColor}`}>
+                Log In
               </button>
-              <button
-                onClick={() => navigate('login')}
-                className="inline-flex items-center bg-gray-900 text-white px-5 py-3 rounded-full text-base font-semibold hover:bg-gray-700 transition-colors shadow-lg dark:bg-gray-700 dark:hover:bg-gray-600"
-              >
-                <LogIn size={20} className="mr-2" /> Log In
+              <button onClick={() => navigate('register')}
+                className={`font-medium text-sm px-4 py-1.5 rounded-full border-2 
+                            ${isScrolled || !darkMode
+                    ? 'text-blue-600 border-blue-500 hover:bg-blue-500/10 dark:text-blue-400 dark:border-blue-400 dark:hover:bg-blue-400/10'
+                    : 'text-white border-white/80 hover:bg-white/10'
+                  } ${headerBaseClass}`}>
+                Register
               </button>
             </>
           )}
-
           <button
-            onClick={() => setDarkMode(!darkMode)}
-            className={`p-3 rounded-full transition-colors ${isScrolled
-              ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600'
-              : `${getTransparentTextColor()} hover:bg-gray-200/50 dark:hover:bg-gray-700/50`
-              }`}
+            onClick={toggleDarkMode}
             aria-label="Toggle dark mode"
+            title="Toggle theme"
+            className={`p-2 rounded-full ${headerBaseClass} ${dynamicIconColor} ${dynamicIconHoverColor} ${dynamicHoverBgColor}`}
           >
-            {darkMode ? <Sun size={26} /> : <Moon size={26} />}
+            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
           </button>
         </div>
 
-        {/* Mobile Menu Toggle and Dark Mode Toggle */}
+        {/* Mobile Menu Toggle */}
         <div className="md:hidden flex items-center space-x-2">
+          {isLoggedIn && (
+            <button
+              onClick={() => navigate('/cart')}
+              aria-label="Shopping Cart"
+              title="Shopping Cart"
+              className={`p-2 rounded-full ${headerBaseClass} ${dynamicIconColor} ${dynamicIconHoverColor} ${dynamicHoverBgColor}`}
+            >
+              <ShoppingCart size={22} />
+            </button>
+          )}
           <button
-            onClick={() => setDarkMode(!darkMode)}
-            className={`p-3 rounded-full transition-colors ${isScrolled
-              ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600'
-              : `${getTransparentTextColor()} hover:bg-gray-200/50 dark:hover:bg-gray-700/50`
-              }`}
+            onClick={toggleDarkMode}
             aria-label="Toggle dark mode"
+            title="Toggle theme"
+            className={`p-2 rounded-full ${headerBaseClass} ${dynamicIconColor} ${dynamicIconHoverColor} ${dynamicHoverBgColor}`}
           >
-            {darkMode ? <Sun size={26} /> : <Moon size={26} />}
+            {darkMode ? <Sun size={22} /> : <Moon size={22} />}
           </button>
-          <button onClick={toggleMenu} className={`p-2 rounded-md transition-colors ${isScrolled
-            ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:outline-none hover:bg-gray-50 dark:hover:bg-gray-800'
-            : getTransparentTextColor() + ' focus:outline-none hover:bg-gray-50/50 dark:hover:bg-gray-800/50'
-            }`}>
-            {isMenuOpen ? <X size={30} /> : <Menu size={30} />}
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className={`p-2 rounded-md ${headerBaseClass} ${dynamicIconColor} ${dynamicIconHoverColor} ${dynamicHoverBgColor}`}>
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </nav>
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className={`md:hidden absolute top-full left-0 w-full
-          ${darkMode ? 'bg-gray-900' : 'bg-white'}
-          border-t border-gray-100 dark:border-gray-700 py-4 px-4 shadow-lg`}>
-          <nav className="flex flex-col space-y-2">
-            {/* Mobile Navigation Links */}
-            {['home', 'servicios-section', 'contact', 'about'].map((section, i) => (
-              <a
-                key={section}
-                
-                onClick={() => { navigate(section); setIsMenuOpen(false); }}
-                className={`font-bold py-2 px-3 rounded-md transition-colors text-lg ${getMobileMenuTextColor()} hover:bg-gray-100 dark:hover:bg-gray-800`}
+        <div className={`md:hidden fixed inset-0 top-[72px] z-40
+                        ${darkMode ? 'bg-gray-900/95' : 'bg-white/95'}
+                        backdrop-blur-md 
+                        ${headerBaseClass} transition-opacity duration-300 ease-in-out`}
+          onClick={() => setIsMenuOpen(false)}
+        >
+          <nav
+            className="h-full flex flex-col p-4 overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {navItems.map((item) => (
+              <Link
+                key={`mobile-${item.name}`}
+                to={item.path}
+                onClick={() => setIsMenuOpen(false)}
+                className={`font-semibold text-lg py-3.5 px-3 rounded-lg ${headerBaseClass}
+                            ${darkMode ? 'text-gray-200 hover:bg-gray-700/70' : 'text-gray-700 hover:bg-gray-100'}`}
               >
-                {['Home', 'Services', 'Contact', 'About Us'][i]}
-              </a>
+                {item.name}
+              </Link>
             ))}
-            {isLoggedIn ? (
-              <>
-                {/* User Info in Mobile Menu Header */}
-                <div className={`flex items-center font-medium py-2 px-3 rounded-md transition-colors text-base ${getMobileMenuTextColor()} mt-4`}>
-                  {currentUser && currentUser.photo ? (
-                    <img
-                      src={currentUser.photo}
-                      alt={currentUser.name || 'User'}
-                      className="w-8 h-8 rounded-full object-cover mr-2 border border-gray-300 dark:border-gray-600"
-                      referrerpolicy="no-referrer"
-                    />
-                  ) : (
-                    <User size={22} className="mr-2" />
-                  )}
-                  {currentUser?.name || 'User'}
-                </div>
-                {/* Mobile Profile Menu Options */}
-                <a  onClick={() => { navigate('profile'); setIsMenuOpen(false); }} className={`flex items-center font-medium py-2 px-3 rounded-md transition-colors text-base ${getMobileMenuTextColor()} hover:bg-gray-100 dark:hover:bg-gray-800`}>
-                  <UserCircle size={22} className="mr-2" /> Profile
-                </a>
-                <a  onClick={() => { navigate('settings'); setIsMenuOpen(false); }} className={`flex items-center font-medium py-2 px-3 rounded-md transition-colors text-base ${getMobileMenuTextColor()} hover:bg-gray-100 dark:hover:bg-gray-800`}>
-                  <Settings size={22} className="mr-2" /> Settings
-                </a>
-                <button
-                  onClick={() => { onLogout(navigate); setIsMenuOpen(false); }}
-                  className={`flex items-center justify-center font-medium py-2 px-3 rounded-md transition-colors text-base
-                    ${darkMode
-                      ? 'bg-red-700 text-white hover:bg-red-600'
-                      : 'bg-red-600 text-white hover:bg-red-700'}`}
-                >
-                  <LogOut size={22} className="mr-2" /> Logout
-                </button>
-              </>
-            ) : (
-              <>
-                {/* Mobile Register Button */}
-                <button
-                  onClick={() => { navigate('register'); setIsMenuOpen(false); }}
-                  className={`flex items-center justify-center font-medium py-2 px-3 rounded-md transition-colors text-base mt-4
-                    ${darkMode
-                      ? 'bg-gray-700 text-white hover:bg-gray-600'
-                      : 'bg-gray-200 text-gray-900 hover:bg-gray-300'}`}
-                >
-                  <UserPlus size={22} className="mr-2" /> Register
-                </button>
-                {/* Mobile Log In Button */}
-                <button
-                  onClick={() => { navigate('login'); setIsMenuOpen(false); }}
-                  className={`flex items-center justify-center font-medium py-2 px-3 rounded-md transition-colors text-base
-                    ${getMobileMenuTextColor()} hover:bg-gray-100 dark:hover:bg-gray-800`}
-                >
-                  <LogIn size={22} className="mr-2" /> Log In
-                </button>
-              </>
-            )}
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-3 space-y-2">
+              {isLoggedIn ? (
+                <>
+                  <div className={`flex items-center px-3 py-2.5 mb-1`}>
+                    {currentUser?.photo ? (
+                      <img
+                        src={currentUser.photo} alt={decodeURIComponent(escape(currentUser?.name)) || 'User'}
+                        className="w-10 h-10 rounded-full object-cover mr-3 border-2 border-gray-300 dark:border-gray-600"
+                        referrerpolicy="no-referrer"
+                        onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name || 'U')}&background=0D8ABC&color=fff&size=40`; }}
+                      />
+                    ) : (
+                      <UserCircle size={40} className={`mr-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                    )}
+                    <div>
+                      <p className={`text-base font-semibold ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>{decodeURIComponent(escape(currentUser?.name)) || 'User Account'}</p>
+                      <p className={`text-sm text-gray-500 dark:text-gray-400 truncate`}>{currentUser?.email}</p>
+                    </div>
+                  </div>
+                  <Link to='/profile' onClick={() => setIsMenuOpen(false)} className={`flex items-center font-semibold py-3.5 px-3 rounded-lg ${headerBaseClass} ${darkMode ? 'text-gray-200 hover:bg-gray-700/70' : 'text-gray-700 hover:bg-gray-100'}`}>
+                    <UserCircle size={20} className="mr-3 text-gray-500 dark:text-gray-400" /> Profile
+                  </Link>
+                  <Link to='/profile/settings' onClick={() => setIsMenuOpen(false)} className={`flex items-center font-semibold py-3.5 px-3 rounded-lg ${headerBaseClass} ${darkMode ? 'text-gray-200 hover:bg-gray-700/70' : 'text-gray-700 hover:bg-gray-100'}`}>
+                    <Settings size={20} className="mr-3 text-gray-500 dark:text-gray-400" /> Settings
+                  </Link>
+                  <button onClick={() => { onLogout(navigate); setIsMenuOpen(false); }} className={`w-full flex items-center text-left font-semibold py-3.5 px-3 rounded-lg ${headerBaseClass} ${darkMode ? 'text-red-400 hover:bg-red-500/20' : 'text-red-600 hover:bg-red-500/10'}`}>
+                    <LogOut size={20} className="mr-3" /> Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to='/login' onClick={() => setIsMenuOpen(false)} className={`block w-full text-center font-semibold py-3 px-3 rounded-lg ${headerBaseClass} ${darkMode ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-500 text-white hover:bg-blue-600'}`}>Log In</Link>
+                  <Link to='/register' onClick={() => setIsMenuOpen(false)} className={`block w-full text-center font-semibold py-3 px-3 rounded-lg border-2 ${headerBaseClass} ${darkMode ? 'text-blue-400 border-blue-400 hover:bg-blue-400/10' : 'text-blue-600 border-blue-500 hover:bg-blue-500/10'}`}>Register</Link>
+                </>
+              )}
+            </div>
           </nav>
         </div>
       )}
