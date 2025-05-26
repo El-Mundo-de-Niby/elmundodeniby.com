@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Home, UserCircle as ProfileIcon, Lock, ShoppingCart, Bot as BotIcon, Settings, LogOut, Repeat, Bot } from 'lucide-react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import FadeInOnScroll from '../common/FadeInOnScroll';
-
 // Importar los componentes de cada sección del perfil
 import PersonalInformationForm from './profile/PersonalInformation';
 import PasswordChangeForm from './profile/PasswordChange';
@@ -12,8 +11,10 @@ import BotsManagementSection from './profile/BotsManagementSection';
 import DangerZoneSection from './profile/DangerZone';
 import MySubscriptionsSection from './profile/SubscriptionsSection';
 import BotConfigurationPage from './profile/bot/BotConfigurationPage';
+import { useAuth } from '../../contexts/AuthContext';
 
-const ProfileSettingsPage = ({ currentUser, onUpdateProfile, onDeleteAccount, onLogout }) => {
+const ProfileSettingsPage = () => {
+    const { currentUser, updateProfile, deleteAccount, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation(); // location.pathname estará disponible aquí
 
@@ -45,7 +46,7 @@ const ProfileSettingsPage = ({ currentUser, onUpdateProfile, onDeleteAccount, on
         setIsSaving(true); setSaveSuccess(''); setSaveError('');
         try {
             await new Promise(resolve => setTimeout(resolve, 1500));
-            onUpdateProfile({ name, email, photo: photoUrl });
+            updateProfile({ name, email, photo: photoUrl });
             setSaveSuccess("Profile updated successfully!");
             setTimeout(() => setSaveSuccess(''), 3000);
         } catch (error) {
@@ -84,7 +85,7 @@ const ProfileSettingsPage = ({ currentUser, onUpdateProfile, onDeleteAccount, on
         setIsSaving(true); setSaveError('');
         try {
             await new Promise(resolve => setTimeout(resolve, 2000));
-            onDeleteAccount();
+            deleteAccount();
         } catch (error) {
             setSaveError("Failed to delete account.");
             setTimeout(() => setSaveError(''), 5000);
@@ -203,7 +204,7 @@ const ProfileSettingsPage = ({ currentUser, onUpdateProfile, onDeleteAccount, on
                         </div>
                         <div className="p-6 border-t border-gray-200 dark:border-gray-700/50">
                             <button
-                                onClick={() => onLogout(navigate)}
+                                onClick={() => logout()}
                                 className="flex w-full items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400 transition-colors duration-200 group"
                             >
                                 <LogOut size={18} className="group-hover:text-red-500 dark:group-hover:text-red-400" />

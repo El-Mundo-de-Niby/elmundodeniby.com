@@ -1,5 +1,5 @@
 // src/components/pages/profile/BotConfigurationPage.jsx
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import FadeInOnScroll from '../../../common/FadeInOnScroll';
 import {
@@ -19,6 +19,7 @@ import BotCommandsTab from './tabs/BotCommandsTab';
 import BotLogsTab from './tabs/BotLogsTab';
 import BotSupportTab from './tabs/BotSupportTab';
 import BotDeleteTab from './tabs/BotDeleteTab';
+import toast from 'react-hot-toast';
 
 // Datos de ejemplo de los bots del usuario (deberías tener una fuente única para estos datos)
 // Asegúrate de que esta estructura y los IDs coincidan con los de BotsManagementSection.jsx
@@ -147,23 +148,20 @@ const BotConfigurationPage = () => {
         if (saveMessage.text) setSaveMessage({ type: '', text: '' });
     };
 
-    const handleChannelsChange = (e) => {
-        const channelsArray = e.target.value.split(',').map(channel => channel.trim()).filter(Boolean);
-        setConfig(prevConfig => ({ ...prevConfig, moderatedChannels: channelsArray }));
-        if (saveMessage.text) setSaveMessage({ type: '', text: '' });
-    };
-
-    const handleSaveConfiguration = async (e) => {
+    const handleSaveConfiguration = useCallback(async (e) => {
         e.preventDefault();
         setIsSaving(true); setSaveMessage({ type: '', text: '' });
         console.log('Saving configuration for bot:', botId, config);
         await new Promise(resolve => setTimeout(resolve, 1800));
         const success = Math.random() > 0.1;
-        if (success) setSaveMessage({ type: 'success', text: 'Configuration saved successfully!' });
-        else setSaveMessage({ type: 'error', text: 'Failed to save configuration. Please try again.' });
+        if (success) {
+            toast.success('Settings saved successfully!');
+        } else {
+            toast.error('Failed to save settings. Please try again.');
+          }
         setIsSaving(false);
         setTimeout(() => setSaveMessage({ type: '', text: '' }), 5000);
-    };
+    }, [config, botId, toast]);
 
     const handlePowerAction = async (action) => {
         setIsPowerActionLoading(true); setSaveMessage({ type: '', text: '' });

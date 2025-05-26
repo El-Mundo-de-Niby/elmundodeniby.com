@@ -12,7 +12,7 @@ const BotGlobalSettingsTab = ({ config, handleConfigChange, botToken, onSaveToke
     const [showToken, setShowToken] = useState(false);
     const [embedHexColor, setEmbedHexColor] = useState(config?.embedColor || '#5865F2');
     const [showColorPicker, setShowColorPicker] = useState(false);
-
+    
     useEffect(() => {
         setLocalConfig(config);
         setEmbedHexColor(config?.embedColor || '#5865F2');

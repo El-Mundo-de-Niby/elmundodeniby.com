@@ -22,10 +22,18 @@ import ServiceDetailPage from './components/pages/home/ServiceDetailPage';
 import CartPage from './components/pages/CartPage';
 import BotConfigurationPage from './components/pages/profile/bot/BotConfigurationPage';
 import BotStatsPage from './components/pages/profile/bot/BotStatsPage';
+import NotificationsPage from './components/pages/NotificationsPage';
+import { useAuth, AuthProvider } from './contexts/AuthContext';
+import * as authUtils from './components/utils/auth'; // Importa tus utilidades de auth
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [heroScrollY, setHeroScrollY] = useState(0);
+
+  // Obtener estado y funciones de autenticación del contexto
+  const {
+    isLoggedIn,
+  } = useAuth();
 
   const getInitialDarkMode = () => {
     if (typeof window !== 'undefined') {
@@ -37,33 +45,9 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(getInitialDarkMode);
 
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
 
-  const navigate = useNavigate();
   // const location = useLocation(); // No es necesario aquí si LoginPage lo maneja
 
-  const onLoginSuccess = (rawUserData, from) => { // rawUserData viene de performLogin o handleGoogleAuthSuccess
-    handleSuccessfulLogin(setIsLoggedIn, setCurrentUser, rawUserData); // Esta función ahora procesa el nombre internamente
-    navigate(from || '/', { replace: true });
-  };
-
-  const onRegisterSuccess = (rawUserData) => { // rawUserData viene de performRegister
-    handleSuccessfulLogin(setIsLoggedIn, setCurrentUser, rawUserData); // Esta función ahora procesa el nombre internamente
-    navigate('/');
-  };
-
-  const handleUpdateProfile = (updatedProfile) => {
-    setCurrentUser(prev => ({ ...prev, ...updatedProfile }));
-  };
-
-  const handleDeleteAccount = () => {
-    handleLogout(setIsLoggedIn, setCurrentUser, navigate);
-  };
-
-  useEffect(() => {
-    checkLoginStatus(setIsLoggedIn, setCurrentUser);
-  }, []);
 
   const toggleDarkMode = () => {
     setDarkMode(prevMode => !prevMode);
@@ -98,9 +82,6 @@ const App = () => {
         heroScrollY={heroScrollY}
         toggleDarkMode={toggleDarkMode}
         darkMode={darkMode}
-        isLoggedIn={isLoggedIn}
-        currentUser={currentUser}
-        onLogout={() => handleLogout(setIsLoggedIn, setCurrentUser, navigate)}
       />
       <main className="flex-grow">
         <Routes>
@@ -117,9 +98,10 @@ const App = () => {
           
           <Route path="/services/:serviceId" element={<ServiceDetailPage />} /> {/* Nueva Ruta Dinámica */}
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/login" element={<LoginPage onLoginSuccess={onLoginSuccess} />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/cart" element={<CartPage />} />
-          <Route path="/register" element={<RegisterPage onRegisterSuccess={onRegisterSuccess} />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
           
           <Route
             path="/profile/*"
@@ -127,16 +109,12 @@ const App = () => {
               <ProtectedRoute
                 isLoggedIn={isLoggedIn}
                 element={
-                  <ProfileSettingsPage
-                    currentUser={currentUser}
-                    onUpdateProfile={handleUpdateProfile}
-                    onDeleteAccount={handleDeleteAccount}
-                    onLogout={() => handleLogout(setIsLoggedIn, setCurrentUser, navigate)}
-                  />
+                  <ProfileSettingsPage/>
                 }
               />
             }
           />
+          
           <Route
             path="/profile/bots/:botId/configure"
             element={<ProtectedRoute isLoggedIn={isLoggedIn} element={<BotConfigurationPage />} />}
@@ -191,7 +169,9 @@ const App = () => {
 const AppWrapper = () => (
   <Router>
     <ScrollToTop />
-    <App />
+    <AuthProvider>
+        <App />
+    </AuthProvider>
   </Router>
 );
 

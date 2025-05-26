@@ -11,7 +11,7 @@ const logTypeIcons = {
     DEFAULT: { icon: FileText, color: 'text-gray-500 dark:text-gray-400', bg: 'bg-gray-50 dark:bg-gray-700/30' },
 };
 
-const LogEntry = ({ log }) => {
+const LogEntry = React.memo(({ log }) => {
     const { icon: Icon, color, bg } = logTypeIcons[log.type] || logTypeIcons.DEFAULT;
     const date = new Date(log.timestamp);
 
@@ -39,7 +39,7 @@ const LogEntry = ({ log }) => {
             )}
         </div>
     );
-};
+});
 
 const BotLogsTab = ({ botLogs = [] }) => {
     const [filters, setFilters] = useState({

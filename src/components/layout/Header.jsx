@@ -1,9 +1,31 @@
 // File: components/layout/Header.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LogIn, UserPlus, Sun, Moon, X, Menu, LogOut, User, Settings, UserCircle, ShoppingBag, ChevronDown, ShoppingCart } from 'lucide-react';
+import { LogIn, UserPlus, Sun, Moon, X, Bell, Menu, LogOut, User, Settings, UserCircle, ShoppingBag, ChevronDown, ShoppingCart, Code, Server, Power, CreditCard, Info, CheckCheck, Shield, Mail } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useAuth } from '../../contexts/AuthContext';
 
-const Header = ({ isLoggedIn, currentUser, onLogout, darkMode, toggleDarkMode }) => {
+
+// Datos de ejemplo para notificaciones
+const initialNotifications = [
+  { id: 1, title: 'Bot Deployed!', message: 'Your new bot "Moderador Pro" is now online.', timestamp: new Date(Date.now() - 3600000 * 1), isRead: false, link: '/profile/bots/userbot001/configure/home' },
+  { id: 2, title: 'Subscription Renewal', message: 'Your plan for "DJ Melodía" will renew in 3 days.', timestamp: new Date(Date.now() - 3600000 * 5), isRead: false, link: '/profile/bots/userbot002/configure/plan' },
+  { id: 3, title: 'New Feature Added', message: 'Check out the new "Economy" module available for custom bots.', timestamp: new Date(Date.now() - 3600000 * 24 * 2), isRead: true, link: '/create-bot' },
+  { id: 4, title: 'Maintenance Alert', message: 'Scheduled maintenance on Sunday at 03:00 AM UTC.', timestamp: new Date(Date.now() - 3600000 * 24 * 3), isRead: true, link: '#' },
+];
+
+const notificationIcons = {
+  bot_status: <Power size={16} className="text-green-500" />,
+  billing: <CreditCard size={16} className="text-orange-500" />,
+  update: <Info size={16} className="text-blue-500" />,
+  report: <CheckCheck size={16} className="text-purple-500" />,
+  security: <Shield size={16} className="text-red-500" />,
+  default: <Mail size={16} className="text-gray-500" />,
+};
+
+
+const Header = ({ darkMode, toggleDarkMode }) => {
+  const { isLoggedIn, currentUser, logout } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,6 +33,18 @@ const Header = ({ isLoggedIn, currentUser, onLogout, darkMode, toggleDarkMode })
   const profileMenuRef = useRef(null);
   const profileButtonRef = useRef(null);
   const navigate = useNavigate();
+
+  // Estados para notificaciones
+  const [notifications, setNotifications] = useState(initialNotifications);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const notificationsMenuRef = useRef(null);
+  const notificationsButtonRef = useRef(null);
+
+  // Calcular notificaciones no leídas
+  useEffect(() => {
+    setUnreadCount(notifications.filter(n => !n.isRead).length);
+  }, [notifications]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -20,16 +54,25 @@ const Header = ({ isLoggedIn, currentUser, onLogout, darkMode, toggleDarkMode })
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target) &&
-        profileButtonRef.current && !profileButtonRef.current.contains(event.target)) {
+      if (profileButtonRef.current && !profileButtonRef.current.contains(event.target) &&
+        profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
         setIsProfileMenuOpen(false);
+      }
+      if (notificationsButtonRef.current && !notificationsButtonRef.current.contains(event.target) &&
+        notificationsMenuRef.current && !notificationsMenuRef.current.contains(event.target)) {
+        setIsNotificationsOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleProfileMenu = () => setIsProfileMenuOpen(!isProfileMenuOpen);
+  const toggleNotificationsMenu = () => setIsNotificationsOpen(!isNotificationsOpen);
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -40,7 +83,56 @@ const Header = ({ isLoggedIn, currentUser, onLogout, darkMode, toggleDarkMode })
     { name: 'Contact', path: '/contact' },
   ];
 
+  const markNotificationAsRead = (notificationId) => {
+    setNotifications(prev =>
+      prev.map(n => n.id === notificationId ? { ...n, isRead: true } : n)
+    );
+    // En una app real, harías una llamada a la API aquí
+  };
+
+  const markAllAsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+    // En una app real, harías una llamada a la API aquí
+  };
+
+  const handleNotificationClick = (notification) => {
+    markNotificationAsRead(notification.id);
+    setIsNotificationsOpen(false); // Cerrar panel
+    if (notification.link && notification.link !== '#') {
+      navigate(notification.link);
+    }
+  };
+
   const headerBaseClass = "transition-colors duration-300 ease-in-out";
+  const headerBackground = isScrolled
+    ? (darkMode ? "bg-gray-900/80 backdrop-blur-lg shadow-lg" : "bg-white/80 backdrop-blur-lg shadow-lg")
+    : "bg-transparent";
+
+  const getDynamicColor = (type) => {
+    const baseColor = isScrolled || !darkMode
+      ? (darkMode ? "text-gray-300" : "text-gray-700") // Scrolled or light mode transparent
+      : "text-white"; // Not scrolled, dark mode transparent
+
+    const hoverColor = isScrolled || !darkMode
+      ? (darkMode ? "hover:text-blue-400" : "hover:text-blue-600")
+      : "hover:text-gray-200";
+
+    const iconBaseColor = isScrolled || !darkMode
+      ? (darkMode ? "text-gray-400" : "text-gray-600")
+      : "text-gray-300";
+
+    const iconHoverColor = isScrolled || !darkMode
+      ? (darkMode ? "hover:text-blue-400" : "hover:text-blue-600")
+      : "hover:text-white";
+
+    const hoverBg = isScrolled || !darkMode
+      ? (darkMode ? "hover:bg-gray-800" : "hover:bg-gray-100")
+      : "hover:bg-white/10";
+
+    if (type === 'link') return `${baseColor} ${hoverColor} ${hoverBg}`;
+    if (type === 'icon') return `${iconBaseColor} ${iconHoverColor} ${hoverBg}`;
+    return `${baseColor}`; // Default
+  };
   const scrolledHeaderBg = darkMode ? "bg-gray-900/80 backdrop-blur-lg shadow-lg" : "bg-white/80 backdrop-blur-lg shadow-lg";
   const transparentHeaderBg = "bg-transparent";
 
@@ -57,6 +149,11 @@ const Header = ({ isLoggedIn, currentUser, onLogout, darkMode, toggleDarkMode })
   if (!isMounted) {
     return <header className={`fixed top-0 left-0 w-full z-50 h-[72px] ${headerBaseClass} ${darkMode ? 'bg-gray-900' : 'bg-white'}`}></header>;
   }
+
+  const dropdownVariants = {
+    hidden: { opacity: 0, y: -10, scale: 0.95, transition: { duration: 0.15, ease: "easeOut" } },
+    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.2, ease: "easeIn" } },
+  };
 
   return (
     <header className={`fixed top-0 left-0 w-full z-50 ${headerBaseClass} ${isScrolled ? scrolledHeaderBg : transparentHeaderBg}`}>
@@ -91,6 +188,85 @@ const Header = ({ isLoggedIn, currentUser, onLogout, darkMode, toggleDarkMode })
               <ShoppingCart size={20} />
             </button>
           )}
+
+          {/* Botón de Notificaciones */}
+          {isLoggedIn && (
+            <div className="relative">
+              <button ref={notificationsButtonRef} onClick={toggleNotificationsMenu} aria-label="Notifications" title="Notifications"
+                className={`p-2.5 rounded-full relative ${headerBaseClass} ${getDynamicColor('icon')}`}>
+                <Bell size={18} />
+                {unreadCount > 0 && (
+                  <span className={`absolute top-1.5 right-1.5 flex h-2.5 w-2.5`}>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                  </span>
+                )}
+              </button>
+              <AnimatePresence>
+                {isNotificationsOpen && (
+                  <motion.div
+                    ref={notificationsMenuRef}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    variants={dropdownVariants}
+                    className={`absolute right-0 mt-3 w-80 sm:w-[360px] rounded-xl shadow-2xl 
+                                ${darkMode ? 'bg-gray-800/90 border border-gray-700/70' : 'bg-white/90 border border-gray-200/80'}
+                                backdrop-blur-md ${headerBaseClass} overflow-hidden`}
+                    role="menu">
+                    <div className="flex justify-between items-center px-4 pt-3 pb-2 border-b border-gray-200 dark:border-gray-700/70">
+                      <h3 className="text-md font-semibold text-gray-800 dark:text-gray-100">Notifications</h3>
+                      {notifications.length > 0 && unreadCount > 0 && (
+                        <button onClick={markAllAsRead}
+                          className="text-xs text-blue-600 dark:text-blue-400 hover:underline disabled:opacity-50 disabled:cursor-not-allowed">
+                          Mark all as read
+                        </button>
+                      )}
+                    </div>
+                    {notifications.length === 0 ? (
+                      <p className="text-center text-sm text-gray-500 dark:text-gray-400 py-10 px-4">You're all caught up!</p>
+                    ) : (
+                      <div className="max-h-[340px] overflow-y-auto custom-scrollbar">
+                        {notifications.map(notif => (
+                          <div key={notif.id} onClick={() => handleNotificationClick(notif)}
+                            className={`px-4 py-3 cursor-pointer border-b border-gray-100 dark:border-gray-700/50 last:border-b-0
+                                          ${darkMode ? 'hover:bg-gray-700/60' : 'hover:bg-gray-50'} transition-colors group`}>
+                            <div className="flex items-start space-x-3">
+                              <div className="mt-0.5 flex-shrink-0">
+                                {!notif.isRead ?
+                                  <span className="w-2 h-2 bg-blue-500 rounded-full block mt-1"></span> :
+                                  <span className="w-2 h-2 bg-transparent rounded-full block mt-1"></span>
+                                }
+                              </div>
+                              <div className={`flex-grow ${notif.isRead ? 'opacity-70' : ''}`}>
+                                <div className="flex items-center justify-between">
+                                  <p className={`text-sm font-semibold ${notif.isRead ? 'text-gray-600 dark:text-gray-400' : 'text-gray-800 dark:text-gray-100'}`}>{notif.title}</p>
+                                  <div className="ml-2 flex-shrink-0">
+                                    {notificationIcons[notif.type] || notificationIcons.default}
+                                  </div>
+                                </div>
+                                <p className={`text-xs text-gray-500 dark:text-gray-400 ${notif.isRead ? '' : 'dark:text-gray-300'} line-clamp-2`}>{notif.message}</p>
+                                <p className="text-[0.7rem] text-gray-400 dark:text-gray-500 mt-1">
+                                  {new Date(notif.timestamp).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false })}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="border-t border-gray-200 dark:border-gray-700/70 bg-gray-50/50 dark:bg-gray-800/50">
+                      <Link to="/notifications" onClick={() => setIsNotificationsOpen(false)}
+                        className="block w-full text-center px-4 py-2.5 text-xs font-medium text-blue-600 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        View all notifications
+                      </Link>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
+          {/* Fin Botón de Notificaciones */}
 
           {isLoggedIn ? (
             <div className="relative">
@@ -152,7 +328,7 @@ const Header = ({ isLoggedIn, currentUser, onLogout, darkMode, toggleDarkMode })
                 </div>
                 <div className="border-t border-gray-200 dark:border-gray-700 mx-1"></div>
                 <button
-                  onClick={() => { onLogout(navigate); setIsProfileMenuOpen(false); }}
+                  onClick={() => { logout(); setIsProfileMenuOpen(false); }}
                   className={`flex items-center w-[calc(100%-0.5rem)] mx-1 my-0.5 text-left px-3.5 py-2 text-sm rounded-md
                               ${darkMode ? 'text-red-400 hover:bg-red-500/20 hover:text-red-300' : 'text-red-600 hover:bg-red-500/10'}
                               ${headerBaseClass}`}
@@ -262,7 +438,7 @@ const Header = ({ isLoggedIn, currentUser, onLogout, darkMode, toggleDarkMode })
                   <Link to='/profile/settings' onClick={() => setIsMenuOpen(false)} className={`flex items-center font-semibold py-3.5 px-3 rounded-lg ${headerBaseClass} ${darkMode ? 'text-gray-200 hover:bg-gray-700/70' : 'text-gray-700 hover:bg-gray-100'}`}>
                     <Settings size={20} className="mr-3 text-gray-500 dark:text-gray-400" /> Settings
                   </Link>
-                  <button onClick={() => { onLogout(navigate); setIsMenuOpen(false); }} className={`w-full flex items-center text-left font-semibold py-3.5 px-3 rounded-lg ${headerBaseClass} ${darkMode ? 'text-red-400 hover:bg-red-500/20' : 'text-red-600 hover:bg-red-500/10'}`}>
+                  <button onClick={() => { logout(); setIsMenuOpen(false); }} className={`w-full flex items-center text-left font-semibold py-3.5 px-3 rounded-lg ${headerBaseClass} ${darkMode ? 'text-red-400 hover:bg-red-500/20' : 'text-red-600 hover:bg-red-500/10'}`}>
                     <LogOut size={20} className="mr-3" /> Logout
                   </button>
                 </>

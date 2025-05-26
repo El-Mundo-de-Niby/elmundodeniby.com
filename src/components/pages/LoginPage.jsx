@@ -5,8 +5,10 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import FadeInOnScroll from '../common/FadeInOnScroll';
 import { performLogin, handleGoogleAuthSuccess, handleGoogleAuthError } from '../utils/auth';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
-const LoginPage = ({ onLoginSuccess }) => {
+const LoginPage = () => {
+    const { login } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -36,12 +38,12 @@ const LoginPage = ({ onLoginSuccess }) => {
     const handleLogin = (e) => {
         e.preventDefault();
         setShowLoginPrompt(false); // Ocultar mensaje al intentar loguear
-        performLogin(email, password, (userData) => onLoginSuccess(userData, from));
+        performLogin(email, password, (userData) => login(userData, from));
     };
 
     const handleGoogleSuccess = (credentialResponse) => {
         setShowLoginPrompt(false); // Ocultar mensaje al intentar loguear
-        handleGoogleAuthSuccess(credentialResponse, (userData) => onLoginSuccess(userData, from));
+        handleGoogleAuthSuccess(credentialResponse, (userData) => login(userData, from));
     };
 
     const handleGoogleError = () => {
