@@ -142,6 +142,10 @@ const App = () => {
             element={<ProtectedRoute isLoggedIn={isLoggedIn} element={<BotConfigurationPage />} />}
           />
           <Route
+            path="/profile/bots/:botId/configure/*"
+            element={<ProtectedRoute isLoggedIn={isLoggedIn} element={<BotConfigurationPage />} />}
+          />
+          <Route
             path="/profile/bots/:botId/stats"
             element={<ProtectedRoute isLoggedIn={isLoggedIn} element={<BotStatsPage />} />}
           />
