@@ -32,7 +32,7 @@ const Chatbot = ({ setIsChatbotOpen }) => {
       }));
 
       const payload = { contents: chatHistory };
-      const apiKey = process.env.GEMINI_API_KEY; // Canvas will automatically provide it in runtime
+      const apiKey = import.meta.env.GEMINI_API_KEY; // Canvas will automatically provide it in runtime
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
       const response = await fetch(apiUrl, {

@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "target": "ESNext", // Vite soporta targets modernos
+        "useDefineForClassFields": true, // Recomendado para Vite
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ESNext"
+        ],
+        "allowJs": true, // Importante para una migración gradual
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true, // Recomendado, pero puedes ponerlo en false si da muchos errores al inicio
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "module": "ESNext",
+        "moduleResolution": "bundler", // "bundler" es la recomendación moderna para Vite/TS5+
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true, // Vite maneja el output
+        "jsx": "react-jsx" // Nuevo JSX Transform
+    },
+    "include": [
+        "src"
+    ],
+    "references": [
+        {
+            "path": "./tsconfig.node.json"
+        }
+    ] // Opcional, para config del entorno de build de Vite
+}
