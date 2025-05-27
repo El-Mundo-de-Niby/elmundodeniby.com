@@ -2,6 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Power, RotateCcw, PowerOff, Loader2, Users, ServerIcon, Activity, Tag as VersionIcon, Link2, CheckCircle, XCircle, AlertTriangle as AlertIcon } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const BotOverviewSection = ({
     bot,
@@ -25,9 +26,9 @@ const BotOverviewSection = ({
         } else if (bot.clientId) {
             const genericInvite = `https://discord.com/oauth2/authorize?client_id=${bot.clientId}&scope=bot&permissions=8`; // Admin permissions by default
             window.open(genericInvite, '_blank', 'noopener,noreferrer');
-            alert("Generated a generic invite link. You might need to adjust permissions in the Discord Developer Portal if this is a real bot.");
+            toast.success("Generated a generic invite link. You might need to adjust permissions in the Discord Developer Portal if this is a real bot.");
         } else {
-            alert("No invite link or Client ID available for this bot to generate an invite link.");
+            toast.error("No invite link or Client ID available for this bot to generate an invite link.");
         }
     };
 

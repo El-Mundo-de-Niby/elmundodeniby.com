@@ -2,6 +2,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { FileText, AlertCircle, Terminal, Info, Settings, User, MessageCircle, Calendar, Filter, Download, RotateCcw, LogsIcon } from 'lucide-react';
 import FormField from '../../../../common/FormField';
+import toast from 'react-hot-toast';
 
 const logTypeIcons = {
     COMMAND: { icon: Terminal, color: 'text-blue-500 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-900/30' },
@@ -101,7 +102,7 @@ const BotLogsTab = ({ botLogs = [] }) => {
         document.body.appendChild(downloadAnchorNode);
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
-        alert("Logs exported (simulated).");
+        toast.success("Logs exported (simulated).");
     };
 
     const resetFilters = () => {

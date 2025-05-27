@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Terminal, TerminalSquare, Settings, Save, Loader2, CheckCircle, Info, SlidersHorizontal, ChevronDown, ChevronUp , Edit2, Trash2, TextIcon, Layers as EmbedIcon } from 'lucide-react';
 import ToggleSwitch from '../../../../common/ToggleSwitch';
 import FormField from '../../../../common/FormField';
+import toast from 'react-hot-toast';
 // Asumimos que ToggleSwitch se importa o se pasa como prop desde BotConfigurationPage
 const BotCommandsTab = ({ botCommands = [], config, onConfigChange, onSaveConfiguration, isSaving, saveMessage }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -71,12 +72,12 @@ const BotCommandsTab = ({ botCommands = [], config, onConfigChange, onSaveConfig
         const commandToSave = editingCustomCommand || newCustomCommand;
 
         if (!commandToSave.name.trim() || !commandToSave.response.trim()) {
-            alert("Command name and response cannot be empty."); // Podrías usar un mensaje más elegante
+            toast.success("Command name and response cannot be empty."); // Podrías usar un mensaje más elegante
             return;
         }
         // Validar que el nombre del comando empiece con el prefijo del bot (si es necesario)
         if (config.prefix && !commandToSave.name.startsWith(config.prefix)) {
-            alert(`Custom command name should start with the bot prefix: "${config.prefix}"`);
+            toast.success(`Custom command name should start with the bot prefix: "${config.prefix}"`);
             return;
         }
 

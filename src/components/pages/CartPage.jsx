@@ -3,6 +3,7 @@ import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FadeInOnScroll from '../common/FadeInOnScroll';
 import { ShoppingCart, Trash2, ArrowLeft, CreditCard, Home, Tag as DiscountIcon, XCircle, CheckCircle, Package, Wand2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 // Datos de ejemplo para el carrito (mantenerlos para la demo)
 const initialCartItems = [
@@ -266,7 +267,7 @@ const CartPage = () => {
                                 <span className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">${total.toFixed(2)}</span>
                             </div>
                             <button
-                                onClick={() => alert('Proceeding to Checkout (Not Implemented)')}
+                                onClick={() => toast.success('Proceeding to Checkout (Not Implemented)')}
                                 className="w-full inline-flex items-center justify-center bg-blue-600 text-white px-6 py-4 rounded-lg text-lg font-semibold
                            hover:bg-blue-700 transition-colors duration-300 shadow-lg hover:shadow-blue-500/40 transform hover:scale-105"
                             >

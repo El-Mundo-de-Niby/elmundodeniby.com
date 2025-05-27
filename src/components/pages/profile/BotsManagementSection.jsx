@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Bot,  Zap, Settings, BarChart2, Power, Trash2, ShieldCheck, Music, MessageSquare as ChatIcon, PlusCircle, Server, Eye, Edit3 } from 'lucide-react';
 import FadeInOnScroll from '../../common/FadeInOnScroll';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 // Datos de ejemplo para los bots del usuario
 const userBotsData = [
@@ -79,7 +80,7 @@ const BotsManagementSection = () => {
         } else if (action === 'stats') { // NUEVA CONDICIÓN
             navigate(`/profile/bots/${botId}/stats`);
         } else {
-            alert(`Action: ${action} on Bot ID: ${botId} (Not Implemented)`);
+            toast.success(`Action: ${action} on Bot ID: ${botId} (Not Implemented)`);
           }
       };
 

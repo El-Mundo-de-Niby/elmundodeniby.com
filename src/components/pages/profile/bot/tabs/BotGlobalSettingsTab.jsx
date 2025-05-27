@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Eye, EyeOff, Copy, AlertTriangle, Edit3, Check, X } from 'lucide-react';
 import { HexColorPicker } from 'react-colorful';
 import FormField from '../../../../common/FormField';
+import toast from 'react-hot-toast';
 
 const BotGlobalSettingsTab = ({ config, handleConfigChange, botToken, onSaveToken }) => {
     const [localConfig, setLocalConfig] = useState(config);
@@ -63,9 +64,9 @@ const BotGlobalSettingsTab = ({ config, handleConfigChange, botToken, onSaveToke
     const copyToClipboard = (text) => {
         if (!text) return;
         navigator.clipboard.writeText(text).then(() => {
-            alert('Token copied to clipboard!');
+            toast.success('Token copied to clipboard!');
         }, (err) => {
-            alert('Failed to copy token.');
+            toast.error('Failed to copy token.');
         });
     };
 

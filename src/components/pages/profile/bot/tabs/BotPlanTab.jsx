@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CalendarDays, RefreshCw, PlusCircle, ExternalLink, Info, AlertTriangle, CheckCircle, DollarSign, Hash } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const PRICE_PER_DAY = 0.50; // Precio de ejemplo por día extra
 
@@ -45,12 +46,12 @@ const BotPlanSection = ({ bot }) => {
     const formattedEndDate = subscriptionEndDate ? new Date(subscriptionEndDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) : 'N/A';
 
     const handleRenew = () => {
-        alert(`Renew subscription for ${bot.name} (Plan: ${planName}) - Not Implemented`);
+        toast.success(`Renew subscription for ${bot.name} (Plan: ${planName}) - Not Implemented`);
         // Lógica para redirigir a pasarela de pago o proceso de renovación
     };
 
     const handleAddCustomDays = () => {
-        alert(`Add ${customDays} day(s) to ${bot.name} for $${customDaysPrice.toFixed(2)} - Not Implemented`);
+        toast.success(`Add ${customDays} day(s) to ${bot.name} for $${customDaysPrice.toFixed(2)} - Not Implemented`);
         // Lógica para procesar el pago por días extra
     };
 

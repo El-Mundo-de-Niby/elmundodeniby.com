@@ -208,9 +208,9 @@ const BotConfigurationPage = () => {
             // Construir un enlace de invitación genérico si solo tenemos clientId
             const genericInvite = `https://discord.com/oauth2/authorize?client_id=${bot.clientId}&scope=bot&permissions=8`; // Permisos de administrador por defecto
             window.open(genericInvite, '_blank', 'noopener,noreferrer');
-            alert("Generated a generic invite link. You might need to adjust permissions in the Discord Developer Portal.");
+            toast.success("Generated a generic invite link. You might need to adjust permissions in the Discord Developer Portal.");
         } else {
-            alert("No invite link or Client ID available for this bot.");
+            toast.success("No invite link or Client ID available for this bot.");
         }
       };
 
@@ -298,7 +298,7 @@ const BotConfigurationPage = () => {
             // 1. Invalidar datos del bot en el estado global/contexto.
             // 2. Mostrar un mensaje global de éxito (ej. con un sistema de toast).
             // 3. Navegar fuera de esta página, probablemente a /profile/bots.
-            alert(`Bot ${botIdToDelete} has been deleted (simulated). Reason: ${reason || 'Not provided'}. Redirecting...`);
+            toast.success(`Bot ${botIdToDelete} has been deleted (simulated). Reason: ${reason || 'Not provided'}. Redirecting...`);
             navigate('/profile/bots');
         } else {
             setSaveMessage({ type: 'error', text: `Failed to delete bot ${botIdToDelete}. Please try again.` });

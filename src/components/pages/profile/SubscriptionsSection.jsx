@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FadeInOnScroll from '../../common/FadeInOnScroll';
 import { Repeat, CalendarCheck, DollarSign, AlertTriangle, CheckCircle, XCircle, Settings, Loader2, Package, Bot as BotIconLucide, ExternalLink, Info, Hash } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 // Datos de ejemplo para las suscripciones del usuario
 const userSubscriptionsData = [
@@ -81,20 +82,20 @@ const MySubscriptionsSection = () => {
     }, []);
 
     const handleManageSubscription = (subscriptionId) => {
-        alert(`Manage Subscription ID: ${subscriptionId} (Not Implemented). This could navigate to an external billing portal or a detailed subscription management page.`);
+        toast.success(`Manage Subscription ID: ${subscriptionId} (Not Implemented). This could navigate to an external billing portal or a detailed subscription management page.`);
         // navigate(`/billing/manage/${subscriptionId}`);
     };
 
     const navigateToOrder = (orderId) => {
         // En el futuro, podrías pasar el orderId en el estado para que OrdersSection lo resalte
         navigate('/profile/orders', { state: { highlightOrderId: orderId } });
-        alert(`Navigating to Order ID: ${orderId}. Highlighting feature not fully implemented in OrdersSection yet.`);
+        toast.success(`Navigating to Order ID: ${orderId}. Highlighting feature not fully implemented in OrdersSection yet.`);
     };
 
     const navigateToBot = (botId) => {
         // Similar para bots
         navigate('/profile/bots', { state: { highlightBotId: botId } });
-        alert(`Navigating to Bot ID: ${botId}. Highlighting feature not fully implemented in BotsManagementSection yet.`);
+        toast.success(`Navigating to Bot ID: ${botId}. Highlighting feature not fully implemented in BotsManagementSection yet.`);
     };
 
 
@@ -188,7 +189,7 @@ const MySubscriptionsSection = () => {
                                             </button>
                                             {sub.status === 'Active' && (
                                                 <button
-                                                    onClick={() => alert(`Cancel Subscription ${sub.id} (Not Implemented)`)}
+                                                    onClick={() => toast.success(`Cancel Subscription ${sub.id} (Not Implemented)`)}
                                                     className="text-xs bg-red-100 dark:bg-red-700/50 hover:bg-red-200 dark:hover:bg-red-700/70 text-red-600 dark:text-red-300 font-semibold py-1.5 px-3 rounded-md flex items-center justify-center transition-colors"
                                                 >
                                                     <XCircle size={14} className="mr-1.5" /> Cancel

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import FadeInOnScroll from '../../common/FadeInOnScroll';
 import { ArrowLeft, ShoppingCart, Tag, ListChecks, Zap, Home, PlusCircle, ExternalLink, DollarSign, Code, Server, Percent } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 // Mock data - en una app real, esto vendría de una API o estado global.
 const availableBotsData = [
@@ -109,7 +110,7 @@ const BotDetailPage = () => {
         if (bot.testBotInviteLink) {
             window.open(bot.testBotInviteLink, '_blank', 'noopener,noreferrer');
         } else {
-            alert('A test version for this bot is not available at the moment.');
+            toast.error('A test version for this bot is not available at the moment.');
         }
     };
 

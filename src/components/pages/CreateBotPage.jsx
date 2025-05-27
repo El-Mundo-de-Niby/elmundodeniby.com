@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FadeInOnScroll from '../common/FadeInOnScroll';
 import { Zap, Check, Server, ArrowLeft, Home, PlusCircle, Trash2, Music, ShieldCheck, Smile, AlertTriangle, MessageSquare, DollarSign, Wand2, ShoppingCart, RefreshCw, Info } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const predefinedModulesData = [
     { id: 'music', name: 'Music Module', description: 'Play music from YouTube, Spotify, etc. Manage queues and playlists.', price: 15.00, icon: Music, color: 'bg-pink-500 dark:bg-pink-600', iconColor: 'text-pink-100' },
@@ -111,7 +112,7 @@ const CreateBotPage = () => {
             totalPrice: totalPrice.toFixed(2)
         };
         console.log("Bot Configuration:", configuration);
-        alert(`Bot "${configuration.botName}" configured! Total: $${configuration.totalPrice}. Details in console.`);
+        toast.success(`Bot "${configuration.botName}" configured! Total: $${configuration.totalPrice}. Details in console.`);
         // Aquí iría la lógica para enviar al carrito o a un proceso de pago
     };
 

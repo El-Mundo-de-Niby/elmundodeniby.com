@@ -1,5 +1,7 @@
 // src/components/utils/auth.jsx
 
+import toast from "react-hot-toast";
+
 // Función para manejar el inicio de sesión exitoso
 export const handleSuccessfulLogin = (setIsLoggedIn, setCurrentUser, userData) => {
     // Asumimos que userData.name ya viene en el formato correcto (UTF-8)
@@ -60,7 +62,7 @@ export const performLogin = (email, password, onLoginSuccessCallback) => {
 // El parámetro 'navigate' se elimina de aquí
 export const performRegister = (name, email, password, confirmPassword, onRegisterSuccessCallback) => {
     if (password !== confirmPassword) {
-        alert('Passwords do not match!');
+        toast.error('Passwords do not match!');
         return false;
     }
     console.log('Registering with:', { name, email, password });
@@ -100,5 +102,5 @@ export const handleGoogleAuthSuccess = (credentialResponse, onAuthSuccessCallbac
 // Error de login/registro con Google
 export const handleGoogleAuthError = () => {
     console.error('Google authentication failed');
-    alert('Google Authentication Failed. Please try again.');
+    toast.error('Google Authentication Failed. Please try again.');
 };

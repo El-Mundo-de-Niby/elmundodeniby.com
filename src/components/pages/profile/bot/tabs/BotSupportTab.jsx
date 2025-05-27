@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { LifeBuoy, Send, Info, CheckCircle, AlertCircle, ExternalLink, MailIcon, MessageSquare, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom'; // Si necesitas navegar a /contact
 import FormField from '../../../../common/FormField';
+import toast from 'react-hot-toast';
 
 const BotSupportTab = ({
     bot,
@@ -19,7 +20,7 @@ const BotSupportTab = ({
         e.preventDefault();
         if (!problemCategory) {
             // Opcional: mostrar un error si la categoría no está seleccionada
-            alert("Please select a problem category.");
+            toast("Please select a problem category.");
             return;
         }
         // Enviar la categoría junto con el mensaje
