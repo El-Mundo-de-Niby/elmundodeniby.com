@@ -161,7 +161,7 @@ const AboutUsPage = () => {
             </p>
             {/* Video placeholder and button for dark mode */}
             <div className="relative w-full max-w-5xl mx-auto aspect-video bg-gray-200 dark:bg-gray-700 rounded-3xl shadow-2xl dark:shadow-xl dark:shadow-gray-700/50 overflow-hidden group">
-              <img src="https://img.youtube.com/vi/xD_7Mw_S1Xo/maxresdefault.jpg" alt="Video Placeholder" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <img src="/images/thumb.png" alt="Video Placeholder" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                 <a href="https://www.youtube.com/@codingwithdew3066" target="_blank" rel="noopener noreferrer" className="inline-flex items-center bg-white dark:bg-gray-900 text-gray-900 dark:text-white px-10 py-5 rounded-full text-lg font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-lg transform hover:scale-105">
                   Visit Channel <ChevronRight className="ml-3" size={24} />

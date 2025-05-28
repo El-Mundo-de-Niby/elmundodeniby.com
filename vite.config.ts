@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
     plugins: [react()],
     server: {
+        allowedHosts: ['.localhost', 'elmundodeniby.com'],
         port: 3002, // Optional: to keep the same port as CRA
         open: true    // Optional: to open the browser automatically
     },

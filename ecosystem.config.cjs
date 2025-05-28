@@ -3,7 +3,7 @@ module.exports = {
     apps: [
         {
             name: path.dirname(__filename).split(path.sep).pop(), // Dir name
-            script: 'react-scripts start',
+            script: 'npx vite --host',
             // eslint-disable-next-line camelcase
             // cron_restart: '0 0 * * *', // At 00:00
             env: {

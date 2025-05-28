@@ -19,7 +19,7 @@ const HomePage = ({ heroScrollY }) => {
       { /* <TrustedCompanies */ }
 
       {/* Sección de Imagen con Animación al Scroll (Kodalogic-like) */}
-      <ProjectPreview />Our Community - In numbers
+      <ProjectPreview />
 
 
       {/* Sección "Nuestros Bots" (anteriormente Especialidades) */}
