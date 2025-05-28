@@ -19,29 +19,39 @@ Using **npm** or **yarn**:
 
 ```bash
 npm install
-# or
+```
+
+or
+```bash
 yarn install
 ```
 
 ### 3. Run the development server
 
 ```bash
-npm start
-# or
-yarn start
+npm run dev
+```
+or
+```
+yarn dev
 ```
 
-This will launch the app at `http://localhost:3000`.
+This will launch the app at `http://localhost:3002`.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- ⚛️ React 19
-- 🎨 TailwindCSS 3
-- 🎞️ Framer Motion
-- 🧪 Testing Library
-- 💡 Lucide React Icons
+* ⚛️ React 19
+* ⚙️ Vite
+* 🎨 TailwindCSS 3
+* 🎞️ Framer Motion
+* 💡 Lucide React Icons
+* 🌐 React Router DOM 7
+* 🌍 i18next + react-i18next
+* 📊 Recharts
+* 🔥 React Hot Toast
+* ✅ Testing Library
 
 ---
 
@@ -59,6 +69,7 @@ This will launch the app at `http://localhost:3000`.
   index.js
 tailwind.config.js
 postcss.config.js
+vite.config.ts
 ```
 
 ---
@@ -81,10 +92,13 @@ npm run build
 yarn build
 ```
 
-Build output will be in the `/build` folder.
+The build output will be placed in the `/build` folder.
 
 ---
 
 ## 🔒 License
 
-This project is private and owned by El Mundo de Niby. Unauthorized use or redistribution is prohibited.
+This project is public and owned by El Mundo de Niby. Unauthorized use or redistribution is prohibited.
+
+---
+
