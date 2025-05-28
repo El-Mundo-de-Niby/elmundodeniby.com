@@ -3,8 +3,8 @@ import FadeInOnScroll from '../common/FadeInOnScroll';
 
 const TrustedCompanies = () => {
     const trustedCompanies = [
-        'https://picsum.photos/150/50?random=1',
-        'https://picsum.photos/150/50?random=1',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPy9nuR2_3f1QRTeU5t0IJvpI0X8rFma4WOQ&s',
+        'https://discord.do/wp-content/uploads/2023/08/El-Hogar-de-Noxx.jpg',
         'https://picsum.photos/150/50?random=1',
         'https://picsum.photos/150/50?random=1',
         'https://picsum.photos/150/50?random=1',

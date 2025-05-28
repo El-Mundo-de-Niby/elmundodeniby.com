@@ -16,10 +16,11 @@ const HomePage = ({ heroScrollY }) => {
       <HeroSection heroScrollY={heroScrollY} />
 
       {/* Sección "Trusted Companies" */}
-      <TrustedCompanies />
+      { /* <TrustedCompanies */ }
 
       {/* Sección de Imagen con Animación al Scroll (Kodalogic-like) */}
-      <ProjectPreview />
+      <ProjectPreview />Our Community - In numbers
+
 
       {/* Sección "Nuestros Bots" (anteriormente Especialidades) */}
       <BotsSection />

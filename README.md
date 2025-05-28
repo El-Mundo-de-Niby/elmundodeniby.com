@@ -102,3 +102,9 @@ This project is public and owned by El Mundo de Niby. Unauthorized use or redist
 
 ---
 
+
+# TODO:
+- [ ] API IMPLEMENTATION
+- [ ] PERFORMANCE OPTIMIZATION
+- [ ] DIRTY CODE CLEANUP
+- [ ] TYPESCRIPT

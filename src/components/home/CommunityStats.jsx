@@ -22,7 +22,7 @@ const CommunityStats = () => {
                         <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg flex flex-col items-center justify-center h-full border border-gray-100 dark:border-gray-700">
                             <Users className="mb-6 text-gray-700 dark:text-gray-300" size={56} />
                             <p className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                                <AnimatedCounter end={1200} />+
+                                <AnimatedCounter end={2000} />+
                             </p>
                             <p className="text-xl text-gray-600 dark:text-gray-400 mt-2 font-medium">Discord Members</p>
                         </div>
@@ -49,7 +49,7 @@ const CommunityStats = () => {
                         <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg flex flex-col items-center justify-center h-full border border-gray-100 dark:border-gray-700">
                             <Server className="mb-6 text-gray-700 dark:text-gray-300" size={56} />
                             <p className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                                <AnimatedCounter end={30} />+
+                                <AnimatedCounter end={200} />+
                             </p>
                             <p className="text-xl text-gray-600 dark:text-gray-400 mt-2 font-medium">Improved Communities</p>
                         </div>
