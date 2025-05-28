@@ -74,7 +74,7 @@ const AboutUsPage = () => {
             {/* Photo on the right */}
             <div className="md:w-1/2 flex justify-center">
               <img
-                src="/public/images/about-us-history.png" // Replace with your actual image path
+                src="/images/about-us-history.png" // Replace with your actual image path
                 alt="Our History"
                 className="rounded-3xl shadow-xl w-full max-w-md md:max-w-none"
                 style={{
@@ -124,7 +124,7 @@ const AboutUsPage = () => {
             <div className="flex flex-col items-center max-w-2xl mx-auto bg-white dark:bg-gray-800 p-10 rounded-3xl shadow-2xl dark:shadow-xl dark:shadow-gray-700/50 border border-gray-100 dark:border-gray-700">
               <div className="mb-10 transform hover:scale-105 transition-transform duration-300 ease-in-out">
                 {/* Image border color for dark mode */}
-                <img src="/public/images/dew.png" alt="Diego Rodríguez" className="rounded-full shadow-xl w-64 h-64 object-cover border-4 border-gray-300 dark:border-gray-500" />
+                <img src="/images/dew.png" alt="Diego Rodríguez" className="rounded-full shadow-xl w-64 h-64 object-cover border-4 border-gray-300 dark:border-gray-500" />
               </div>
               <p className="text-base font-medium text-gray-600 dark:text-gray-400 mb-4 uppercase tracking-wider">CEO & Founder</p>
               <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-8">

@@ -69,13 +69,13 @@ const Footer = () => {
                 <MapPin size={16} className="mr-2 text-blue-400 flex-shrink-0" />
                 <span>Madrid, Spain</span>
               </div>
-              <a href="mailto:info@elmundodeniby.com" className="mt-2 flex items-center text-sm hover:text-blue-400 transition-colors group">
+              <a href="mailto:contact@elmundodeniby.com" className="mt-2 flex items-center text-sm hover:text-blue-400 transition-colors group">
                 <Mail size={16} className="mr-2 text-blue-400 flex-shrink-0 group-hover:animate-pulse" />
-                info@elmundodeniby.com
+                contact@elmundodeniby.com
               </a>
               <a href="tel:+34123456789" className="mt-2 flex items-center text-sm hover:text-blue-400 transition-colors group">
                 <Phone size={16} className="mr-2 text-blue-400 flex-shrink-0 group-hover:animate-pulse" />
-                +34 123 456 789
+                Not available
               </a>
             </div>
 
