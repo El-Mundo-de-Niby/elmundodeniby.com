@@ -48,7 +48,7 @@ const Footer = () => {
     { name: 'Twitter', href: 'https://twitter.com/elmundodeniby', icon: Twitter, label: "Twitter profile for El Mundo de Niby" },
     { name: 'Instagram', href: 'https://instagram.com/elmundodeniby', icon: Instagram, label: "Instagram profile for El Mundo de Niby" },
     { name: 'LinkedIn', href: 'https://linkedin.com/company/elmundodeniby', icon: Linkedin, label: "LinkedIn page for El Mundo de Niby" },
-    { name: 'YouTube', href: 'https://youtube.com/c/CodingWithDew', icon: Youtube, label: "Coding with Dew YouTube Channel" },
+    { name: 'YouTube', href: 'https://www.youtube.com/@codingwithdew3066', icon: Youtube, label: "Coding with Dew YouTube Channel" },
   ];
 
   return (

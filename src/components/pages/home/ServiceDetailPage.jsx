@@ -12,7 +12,7 @@ const serviceDetailsData = {
         icon: Zap,
         colorName: "blue", // Usaremos esto para buscar en el mapeo de clases
         tagline: "Your Vision, Our Code: Bots Built from Scratch.",
-        imageUrl: "https://picsum.photos/seed/custombots_service/1200/500",
+        imageUrl: "/public/images/code.png",
         description: "Need a bot that does exactly what you envision? Our custom bot development service is designed to bring your unique ideas to life. We work closely with you from concept to deployment, ensuring every feature aligns with your server's specific requirements and goals.",
         sections: [
             {
@@ -55,7 +55,7 @@ const serviceDetailsData = {
         icon: Shield,
         colorName: "green",
         tagline: "Streamline Your Server, Engage Your Members.",
-        imageUrl: "https://picsum.photos/seed/automation_service/1200/500",
+        imageUrl: "/public/images/automation.png",
         description: "Automate repetitive tasks and enhance member engagement with our smart community automation bots. From welcoming new users to managing roles and events, we build solutions that save you time and improve your server's efficiency.",
         sections: [
             {
@@ -88,7 +88,7 @@ const serviceDetailsData = {
         icon: Server,
         colorName: "indigo",
         tagline: "Powerful Tools for Effortless Server Control.",
-        imageUrl: "https://picsum.photos/seed/management_service/1200/500",
+        imageUrl: "/public/images/management.png",
         description: "Take full control of your Discord server with our advanced management bots. We provide robust tools for moderation, dynamic role assignment, comprehensive logging, and efficient member and channel administration.",
         sections: [
             {

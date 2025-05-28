@@ -25,7 +25,7 @@ const HeroSection = () => {
     const bgRef = useRef(null);
 
     const updateBgImage = () => {
-        setBgImageUrl(`https://picsum.photos/seed/${Date.now()}/1920/1080`);
+        setBgImageUrl(`https://i.imgur.com/9Bk43XP.png`);
     };
 
     useEffect(() => {
@@ -67,9 +67,6 @@ const HeroSection = () => {
                     const rect = heroSection.getBoundingClientRect();
                     const isHeroInView = rect.top < window.innerHeight && rect.bottom > 0;
 
-                    if (isHeroInView && Math.abs(currentScrollY - lastScrollY) > 150) {
-                        updateBgImage();
-                    }
                 }
 
                 lastScrollY = currentScrollY;

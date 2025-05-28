@@ -13,7 +13,7 @@ const ProjectPreview = () => {
                 </FadeInOnScroll>
                 <div className="relative h-[400px] md:h-[600px] flex items-center justify-center">
                     <ScrollAnimatedImage
-                        src="https://picsum.photos/1200/700?random=1"
+                        src="/public/images/1.png"
                         alt="Placeholder de Proyecto Animado"
                         className="rounded-2xl shadow-2xl object-cover w-full h-full"
                     />

@@ -18,7 +18,7 @@ const ServicesSection = () => {
                         <div className="md:w-1/2 mb-10 md:mb-0">
                             {/* Using Picsum Photos with a seed for consistency */}
                             <ScrollAnimatedImage
-                                src="https://picsum.photos/seed/digitalstrategy/1200/700"
+                                src="https://www.smartinsights.com/wp-content/uploads/2023/02/What-is-digital-strategy.png"
                                 alt="Digital Strategy"
                                 className="rounded-2xl shadow-2xl w-full h-auto object-cover"
                             />
@@ -44,7 +44,7 @@ const ServicesSection = () => {
                         <div className="md:w-1/2 mb-10 md:mb-0">
                             {/* Using Picsum Photos with a different seed */}
                             <ScrollAnimatedImage
-                                src="https://picsum.photos/seed/webdev/1200/700"
+                                src="https://careertraining.nsu.edu/common/images/1/16890/learn-web-design.jpg"
                                 alt="Web Design and Development"
                                 className="rounded-2xl shadow-2xl w-full h-auto object-cover"
                             />
@@ -70,7 +70,7 @@ const ServicesSection = () => {
                         <div className="md:w-1/2 mb-10 md:mb-0">
                             {/* Using Picsum Photos with another seed */}
                             <ScrollAnimatedImage
-                                src="https://picsum.photos/seed/digitalmarketing/1200/700"
+                                src="https://online.hbs.edu/Style%20Library/api/resize.aspx?imgpath=/PublishingImages/blog/posts/digital-marketing-skills.jpg&w=1200&h=630"
                                 alt="Digital Marketing"
                                 className="rounded-2xl shadow-2xl w-full h-auto object-cover"
                             />

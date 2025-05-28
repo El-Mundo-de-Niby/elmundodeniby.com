@@ -48,7 +48,7 @@ export const performLogin = (email, password, onLoginSuccessCallback) => {
     // alert('Login functionality is for demonstration. Integrate your backend here.');
 
     const userData = {
-        name: 'Diego Rodríguez', // Nombre original con tilde
+        name: 'test', // Nombre original con tilde
         email: email,
         photo: `https://ui-avatars.com/api/?name=${encodeURIComponent('Diego Rodríguez')}&background=0D8ABC&color=fff`
     };
